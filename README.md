@@ -1,3 +1,3 @@
 # Example read me
 
-*this
+** Bold **
