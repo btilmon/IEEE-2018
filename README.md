@@ -1,6 +1,3 @@
-# IEEE Robot, Murray State University
+# Example read me
 
-This years competition is in Huntsville, Alabama and is space themed.
-
-
-
+*this
