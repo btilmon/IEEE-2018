@@ -5,7 +5,7 @@
     * Brevin Tilmon - btilmon@murraystate.edu, 812-568-3344, it is best to text me.
 
 ## First Things First ##
-  * Please familiarize yourself with github in order to contribute efficiently to this project. It is easiest to use the Visual Studio Code compiler by Microsoft due to its git integration, but this is definitely not a prerequisite. Please follow these links to fully understand the flow of github before you change any code. Do not hesitate to ask questions.
+  * Create a github account it is free, and sign up to be an IEEE member for $32. Please familiarize yourself with github in order to contribute efficiently to this project. It is easiest to use the Visual Studio Code compiler by Microsoft due to its git integration, but this is definitely not a prerequisite. Follow these links to fully understand the flow of github before you change any code. Do not hesitate to ask questions.
   * Links: 
     * Installing Python programming language and Visual Studio Code on Windows 10: https://youtu.be/dNFgRUD2w68 
     * Downloading Git and using it within Visual Studio Code:
@@ -14,5 +14,9 @@
     https://youtu.be/77W2JSL7-r8
 
 ## Competition Rules ##
-  * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition. Link:         http://sites.ieee.org/southeastcon2019/program/student-program/
-  * 
+  * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition. There is valuable info in this blog. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
+
+## IEEE meeting times and competition FAQS ###
+  * General meetings every ____ at ____
+  * Robot meetings every ____ at ____
+  * Competitiom
