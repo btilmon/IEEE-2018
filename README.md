@@ -8,7 +8,7 @@
 ## First Things First ##
   * Create a github account it is free, and sign up to be an IEEE member for $32 and contact me if this price is an issue as we can work around that. Please familiarize yourself with github in order to contribute efficiently to this project. It is easiest to use the Visual Studio Code compiler by Microsoft due to its git integration, but this is definitely not a prerequisite. Follow these links to fully understand the flow of github before you change any code. Do not hesitate to ask questions.
   * Links: 
-    * Installing Python programming language and Visual Studio Code on Windows 10: https://youtu.be/dNFgRUD2w68 
+    * Installing Python programming language(version 3.6.6 not 3.7) and Visual Studio Code on Windows 10: https://youtu.be/dNFgRUD2w68 
     * Downloading Git and using it within Visual Studio Code:
     https://youtu.be/VOwyH2-VCVY
     * How to use Github if you don't want to use Visual Studio Code:
