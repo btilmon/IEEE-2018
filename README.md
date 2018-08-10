@@ -1,6 +1,7 @@
 # 2018-2019 IEEE Robot 
 
 ## Overview ##
+  * Please share the link of this page with anyone that wants to help out with the robot.
   * Contact if you have any questions at all:
     * Brevin Tilmon - btilmon@murraystate.edu, 812-568-3344, it is best to text me.
 
@@ -12,6 +13,7 @@
     https://youtu.be/VOwyH2-VCVY
     * How to use Github if you don't want to use Visual Studio Code:
     https://youtu.be/77W2JSL7-r8
+  * All 3D printing files should be posted as well so that everything can be tracked. 
 
 ## Competition Rules ##
   * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition. There is valuable info in this blog. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
@@ -19,4 +21,4 @@
 ## IEEE meeting times and competition FAQS ###
   * General meetings every ____ at ____
   * Robot meetings every ____ at ____
-  * Competitiom
+  * IEEE Southeastcon Hardware Competition is in Huntsville, Alabama from April 11th-14th 2019
