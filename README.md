@@ -1,7 +1,7 @@
 # 2018-2019 IEEE Robot 
 
 ## Overview ##
-  * Please share the link of this page with anyone that wants to help out with the robot.
+  * Please share the link of this page with anyone that wants to help out with the robot, we need anyone that has a mechanical, electrical, and computer science background.
   * Contact if you have any questions at all:
     * Brevin Tilmon - btilmon@murraystate.edu, 812-568-3344, it is best to text me.
 
@@ -16,7 +16,7 @@
   * All 3D printing files should be posted as well so that everything can be tracked. 
 
 ## Competition Rules ##
-  * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition. There is valuable info in this blog. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
+  * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition, there is valuable info in this blog so check it frequently. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
 
 ## IEEE meeting times and competition FAQS ###
   * General meetings every ____ at ____
