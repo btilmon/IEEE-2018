@@ -1,2 +1,2 @@
 print("this is a test")
-x = 30
+x = 25
