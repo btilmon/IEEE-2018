@@ -22,6 +22,5 @@
   * From this link you can download the latest rules and access the Slack account which is a     blog where people talk about updates in the competition, there is valuable info in this blog so check it frequently. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
 
 ## IEEE meeting times and competition FAQS ###
-  * General meetings every ____ at ____ in room ____ of the Engineering Physics Building.
-  * Robot meetings every ____ at ____ in room ____ of the Engineering Physics Building.
+  * General meetings every Wednesday at 4:30pm in room either 1301 or 1303 of the Engineering Physics Building.
   * IEEE Southeastcon Hardware Competition is in Huntsville, Alabama from April 11th-14th 2019.
