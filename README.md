@@ -1,7 +1,7 @@
 # (Read this!) 2018-2019 IEEE Robot 
 
 ## Overview ##
-  * Please share the link of this page with anyone that wants to help out with the robot, we need anyone that has a mechanical, electrical, and computer science background.
+  * Please share the link of this page with anyone that wants to help out with the robot, we need anyone that has a mechanical, electrical, or computer science background.
   * Contact if you have any questions at all:
     * Brevin Tilmon - btilmon@murraystate.edu, 812-568-3344, it is best to text me.
 
