@@ -19,10 +19,11 @@
     * How to use Github if you don't want to use Visual Studio Code:
     https://youtu.be/77W2JSL7-r8
   * All 3D printing files should be posted as well so that everything can be tracked. 
+    * test out object detection/tracking algorithms in c++ or python and let us know if you get something to work. We are also working on algorithms.
 
 ## Competition Rules ##
   * From this link you can download the latest rules and access the Slack account which is a blog where people talk about updates in the competition, there is valuable info in this blog so check it frequently. Link: http://sites.ieee.org/southeastcon2019/program/student-program/
 
 ## IEEE meeting times and competition FAQS ###
-  * General meetings every Wednesday at 4:30pm in room either 1301 or 1303 of the Engineering Physics Building.
+  * General meetings  at 4:30pm in room either 1301 or 1303 of the Engineering Physics Building. Watch for emails from Bekah.
   * IEEE Southeastcon Hardware Competition is in Huntsville, Alabama from April 11th-14th 2019.
