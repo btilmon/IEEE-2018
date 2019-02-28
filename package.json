@@ -1,0 +1,19 @@
+{
+  "name": "ieee-2018",
+  "version": "1.0.0",
+  "description": "## Overview ##   * Please share the link of this page with anyone that wants to help out with the robot, we need anyone that has a mechanical, electrical, or computer science background.   * Contact if you have any questions at all:     * Brevin Tilmon - btilmon@murraystate.edu, 812-568-3344, it is best to text me.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/btilmon/IEEE-2018.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/btilmon/IEEE-2018/issues"
+  },
+  "homepage": "https://github.com/btilmon/IEEE-2018#readme"
+}
