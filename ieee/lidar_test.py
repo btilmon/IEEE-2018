@@ -3,7 +3,6 @@ import math
 from time import sleep
 import threading
 import numpy as np
-import pigpio 
 
 ###############################
 #
@@ -34,9 +33,6 @@ Health = "\xA5\x52" #Returns the state of the Lidar
 Stop_Scan = "\xA5\x25" #Stops the scan
 RESET = "\xA5\x40" #Resets the device
 
-pi = ""
-ldrPWM = 17
-
 ###############################
 #
 #  Class Lidar
@@ -51,10 +47,7 @@ class Lidar():
 
     def __init__(self,port):
         #set the port as an instance variable
-	
-	global pi
-	pi = pigpio.pi()
-        
+
         self.port = port
         #lock checks if the connection is made
         lock = False 
@@ -62,10 +55,9 @@ class Lidar():
         #Begin by starting the scan
         lock = self.startScan(self.port)
 
-        #Once scan is started, begin printing data
+        #Once scan is started, beging printing data
         if lock == True:
-            readings = self.getPoints(self.port)
-            #print (readings)
+            self.getPoints(self.port)
         else:
             print ("Exiting")
 
@@ -85,7 +77,6 @@ class Lidar():
     def startScan(self, port):
         print ("Connecting")
         line = ""
-	pi.set_PWM_dutycycle(ldrPWM,255)
         #Lock is true once connected
         lock = False
         #Continue looping until connected
@@ -113,7 +104,6 @@ class Lidar():
                     elif (line[0:2] != "\xa5\x5a" and len(line) == 2):
                         line = ""
             except KeyboardInterrupt:
-		pi.set_PWM_dutycycle(ldrPWM,0)
                 break
         return lock
 
@@ -135,39 +125,25 @@ class Lidar():
 ################################
 
     def getPoints(self,port,polar=True):
-        x = np.array([])
+
         line = ""
         while True:
             try:
-                
                 character = port.read()
                 line += character
                 #Data comes in 5 byte blocks
                 if (len(line) == 5):
                     #Switches based on desired output
-                    out = np.empty([360,2])
                     if polar == True:
 ##                        point = str(self.point_Polar(line))
                         point = self.point_Polar(line)
-                        x = np.append(x,point)
-                        if point[-1]== 359:
-                            break
                     else:
                         point = str(self.point_XY(line))
-                    #p = np.asarray([point])
-                    #print x
-                    
-##                    x = np.array([])
-##                    if point[1] == 0:
-##                        print ('zero!!!!!')
+##                    print (point)
                     line = ""
                     
             except KeyboardInterrupt:
-		pi.set_PWM_dutycycle(ldrPWM,0)
                 break
-        x = np.reshape(x,(x.size/2,2))
-        
-        return x
 
 ###############################
 #
@@ -245,16 +221,17 @@ class Lidar():
         y = distance * math.sin(angle)
         return (x,y)
 
-#if __name__ == "__main__":
-    #COM4 was used on my computer, this will change based on
-    #your setup and whether you're on Windows/Mac/Linux
-#    port = "/dev/ttyUSB0"
-#    ser = serial.Serial(port, 115200, timeout = 5)
-#    ser.setDTR(False)
-#    print (ser.name)
-    
 
-    #Create a Lidar instance, this will immidiately start printing.
-    #To edit where the data is sent, edit the GetPoints Method
-#    lidar = Lidar(ser)  
+
+##if __name__ == "__main__":
+##    #COM4 was used on my computer, this will change based on
+##    #your setup and whether you're on Windows/Mac/Linux
+##    port = "/dev/ttyUSB0"
+##    ser = serial.Serial(port, 115200, timeout = 5)
+##    ser.setDTR(False)
+##    print (ser.name)
+##
+##    #Create a Lidar instance, this will immidiately start printing.
+##    #To edit where the data is sent, edit the GetPoints Method
+##    lidar = Lidar(ser)
 
