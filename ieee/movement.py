@@ -23,10 +23,16 @@ lidar = Lidar(ser)
 left = Motor.Motor(scan.m1DIR,scan.m1PWM)
 right = Motor.Motor(scan.m2DIR,scan.m2PWM)
 left.Inverse()
+
+########### motor speeds#######
+# straight
 L_straight = 255
-R_straight = 243
+R_straight = 244
 
 
+###############################
+
+############ methods #########
 def data(lidar_data):
     x = lidar_data
     x[np.where(x[:,0] == 0),0] = 3000
@@ -37,13 +43,15 @@ def angle_calc(lidar_data, angle):
     x = np.abs(x)
     minim = np.where(x == np.min(x))[0][0]
     return minim
-
+###################################
 
 try:
+    ########
+    # Move out of corner and approach center
+    #######
     
     right.Drive(0,255)
     left.Drive(0,200)
-
     x = data(lidar.getPoints(ser, polar = True))
 
     print(x[0,0])
@@ -55,7 +63,7 @@ try:
 
             print(x[0,0])
             
-    print('turned to kabba amen')
+    print('turned to center')
     right.Drive(0,0)
     left.Drive(0,0)
 
@@ -63,7 +71,7 @@ try:
 
     
     print(x[0,0])
-    while(x[0,0] > 300):
+    while(x[0,0] > 600):
         right.Drive(0,R_straight)
         left.Drive(0,L_straight)
         x = data(lidar.getPoints(ser, polar = True))
@@ -72,31 +80,55 @@ try:
         
     right.Drive(0,0)
     left.Drive(0,0)
-    print('reached kabba!')
-    
+    print('reached center!')
+##    
     x = data(lidar.getPoints(ser, polar = True))
-
     angle = angle_calc(x,270)
-  
-    print('distance',x[angle,0])
-    print('angle',x[angle,1])
-    
-    while(x[angle, 0] > 300):
-
-        left.Drive(0,255)
+    while(x[angle,1] > 275):
         x = data(lidar.getPoints(ser, polar = True))
         angle = angle_calc(x,270)
+
+
+    right.Drive(0,0)
+    left.Drive(0,L_straight)
+    
+    while(x[angle, 0] > 700):
+        x = data(lidar.getPoints(ser, polar = True))
+        angle = angle_calc(x,270)
+        while(x[angle,1] > 275):
+            x = data(lidar.getPoints(ser, polar = True))
+            angle = angle_calc(x,270)
         print('distance in loop',x[angle,0])
         print('angle in loop',x[angle,1])
 
-    while(0==0):
-        left.Drive(0,255)
+    ########
+    # Begin circling center
+    #######
+    print('circling center')
+    while True:
+        
+        right.Drive(0,R_straight)
+        left.Drive(0,L_straight)
+
+        while(x[angle, 0] < 400):
+            x = data(lidar.getPoints(ser, polar = True))
+            angle = angle_calc(x,270)
+            print('I see the center!')
+            
+            while(x[angle,1] > 275):
+                x = data(lidar.getPoints(ser, polar = True))
+                angle = angle_calc(x,270)
+        print('turning towards center')        
         right.Drive(0,255)
-    
-    right.Drive(0,0)
-    left.Drive(0,0)
-    left.Stop()
-    right.Stop()
+        left.Drive(0,0)
+        x = data(lidar.getPoints(ser, polar = True))
+        angle = angle_calc(x,270)
+        print('recalibrating!')
+
+        while(x[angle,1] > 275):
+            x = data(lidar.getPoints(ser, polar = True))
+            angle = angle_calc(x,270)
+
     
 except KeyboardInterrupt:
     print("Exiting")
