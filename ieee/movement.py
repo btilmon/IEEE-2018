@@ -27,7 +27,7 @@ left.Inverse()
 ########### motor speeds#######
 # straight
 L_straight = 255
-R_straight = 244
+R_straight = 246
 
 
 ###############################
@@ -71,7 +71,7 @@ try:
 
     
     print(x[0,0])
-    while(x[0,0] > 600):
+    while(x[0,0] > 500):
         right.Drive(0,R_straight)
         left.Drive(0,L_straight)
         x = data(lidar.getPoints(ser, polar = True))
@@ -108,12 +108,13 @@ try:
     while True:
         
         right.Drive(0,R_straight)
-        left.Drive(0,L_straight)
+        left.Drive(0,180)
 
-        while(x[angle, 0] < 400):
+        while(x[angle, 0] < 750):
             x = data(lidar.getPoints(ser, polar = True))
             angle = angle_calc(x,270)
             print('I see the center!')
+            
             
             while(x[angle,1] > 275):
                 x = data(lidar.getPoints(ser, polar = True))
@@ -123,11 +124,15 @@ try:
         left.Drive(0,0)
         x = data(lidar.getPoints(ser, polar = True))
         angle = angle_calc(x,270)
-        print('recalibrating!')
-
         while(x[angle,1] > 275):
             x = data(lidar.getPoints(ser, polar = True))
             angle = angle_calc(x,270)
+
+##        while(x[angle, 0] > 500 and x[angle, 0] < 700 ):
+##            right.Drive(0,255)
+##            left.Drive(0,0)
+            
+            
 
     
 except KeyboardInterrupt:
