@@ -2,7 +2,7 @@ import scan
 import Motor
 import pigpio
 import numpy as np
-
+from time import sleep
 
 
 
@@ -11,11 +11,15 @@ right = Motor.Motor(scan.m2DIR,scan.m2PWM)
 left.Inverse()
 
 
-
+##
 right.Drive(0,0)
 left.Drive(0,0)
 
+#rightzero point turn
 ##right.Drive(0,255)
-##left.Drive(1,255)
+##left.Drive(0,255)
 
+#left zero point turn
+##right.Drive(0,0)
+##left.Drive(1,255)
 
