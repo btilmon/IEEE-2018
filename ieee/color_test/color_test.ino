@@ -1,10 +1,10 @@
 #include <string.h>
 
-#define aS0 45
-#define aS1 47
+#define aS0 53
+#define aS1 51
 #define aS2 49
-#define aS3 53
-#define aSensorOut 51
+#define aS3 47
+#define aSensorOut 45
 
 #define bS0 37
 #define bS1 35
@@ -48,7 +48,7 @@ void setup() {
   digitalWrite(bS0, HIGH);
   digitalWrite(bS1, LOW);
 
-  Serial.begin(57600);
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -104,9 +104,48 @@ void loop() {
   bRedFrequency = bRedFrequency * scale;
   bBlueFrequency = bBlueFrequency * scale;
   bGreenFrequency = bGreenFrequency * scale;
+
   
-  aOut = (aRedFrequency + aBlueFrequency + aGreenFrequency)/3;
-  bOut = (bRedFrequency + bBlueFrequency + bGreenFrequency)/3;
-  Serial.println(String(aOut) + "^" + String(bOut));
   
+//  aOut = (aRedFrequency + aBlueFrequency + aGreenFrequency)/3;
+//  bOut = (bRedFrequency + bBlueFrequency + bGreenFrequency)/3;
+//  Serial.println(color_processing(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + color_processing(bRedFrequency,bGreenFrequency,bBlueFrequency));
+  Serial.println(color_processing(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + String(aRedFrequency) + "^" + String(aGreenFrequency) + "^" + String(aBlueFrequency));
+  
+//  Serial.println(aRedFrequency);
+  
+}
+
+String color_processing(int r, int g, int b)
+{
+
+  if ((r < 80) and (g < 80) and (b < 80))
+  {
+    return "w";
+  }
+
+  else if ((r < 120) and (g > 150) and (b > 200))
+  {
+    return "r";
+  }
+
+  else if ((r > 230) and (b < 100) and (g > 120 ))
+  {
+    return "b";
+  }
+   
+  else if ((r > 175) and (g < 120) and (b > 190 ))
+  {
+    return "g";
+  }
+
+  else if ((r < 90) and (b < 170) and (g < 120 ))
+  {
+    return "y";
+  }
+
+  else
+  {
+    return "x";
+  }
 }
