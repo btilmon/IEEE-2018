@@ -15,10 +15,16 @@ from LidarPrint import *
 
 
 port = "/dev/ttyUSB0"
-ser = serial.Serial(port, 115200, timeout = 5)
-ser.setDTR(False)
-print (ser.name)
-lidar = Lidar(ser) 
+ser_lidar = serial.Serial(port, 115200, timeout = 0)
+ser_color = serial.Serial("/dev/ttyACM0",9600)
+#### Arduino ports #####
+
+ser_lidar.setDTR(False)
+print (ser_lidar.name)
+lidar = Lidar(ser_lidar)
+
+sensors = ser_color.readline().rstrip()
+data = sensors.split('^')
 
 left = Motor.Motor(scan.m1DIR,scan.m1PWM)
 right = Motor.Motor(scan.m2DIR,scan.m2PWM)
@@ -26,8 +32,8 @@ left.Inverse()
 
 ########### motor speeds#######
 # straight
-L_straight = 160
-R_straight = 167
+L_straight = 230
+R_straight = 223
 
 
 
@@ -36,17 +42,26 @@ R_straight = 167
 
 ############ methods #########
 def data(lidar_data):
+    '''
+    filters any emtpy values from lidar to equal 3000
+    '''
     x = lidar_data
     x[np.where(x[:,0] == 0),0] = 3000
     return x
 
 def angle_calc(lidar_data, angle):
+    '''
+    ratio for determining which angle to look at *pretty sure distance slice is better than this*
+    '''
     x = lidar_data[:,1] - angle
     x = np.abs(x)
     minim = np.where(x == np.min(x))[0][0]
     return minim
     
 def distance_slice(lidar_data, angle, spread):
+    '''
+    gives an array of distances based on user defined angle and angle spread 
+    '''
     x = lidar_data[:,1] - angle
     x = np.abs(x)
     minim = np.where(x == np.min(x))[0][0]
@@ -54,10 +69,10 @@ def distance_slice(lidar_data, angle, spread):
     
     high = minim + spread
     dist = lidar_data[low:high,0]
-
-    if dist == []:
-        distance_slice(lidar_data, angle, spread)
-    
+    if dist.size:
+        abc = 0
+    else:
+        dist = 3000 * np.ones((spread*2))
     return dist
     
 def driveRight(x,increase):
@@ -67,146 +82,125 @@ def driveRight(x,increase):
 def driveLeft(x,increase):
     delta = x + increase
     return left.Drive(0,delta)
+
+def color(raw):
+    '''
+    reads color sensor data from arduino
+    '''
+    if raw[0] == 'c':
+        return 2
+
     
-###################################
+    
+'''
+cases:
+    case 0 = move out of corner and position orthogonally to center
+    case 1 = orbit around center
+    case 2 = move to corner, then enter case 0, enter case 3 if all objects collected
+    case 3 = move to original corner and raise flag
+'''
 
 try:
-    ########
-    # Move out of corner and approach center
-    #######
     
-    right.Drive(0,0)
-    left.Drive(1,160)
-    x = data(lidar.getPoints(ser, polar = True))
-
-    print(x[0,0])
-    while ((x[0,0] > 1000 and x[0,0] <2000) == False):
-        print('turning to center')
-        if x[0,0] > 1000 and x[0,0] <2000:
-            break
-        else:
-            x = data(lidar.getPoints(ser, polar = True))
-
-            print(x[0,0])
-            
-    print('turned to center')
-    right.Drive(0,0)
-    left.Drive(1,0)
-
-    sleep(.5)
-
+    case = 0
     
-    print(x[0,0])
-    while(x[0,0] > 600):
-        right.Drive(0,R_straight)
-        left.Drive(1,L_straight)
-        x = data(lidar.getPoints(ser, polar = True))
+##    case = color(data)
+    print('case is',case)
+    
+    #case 0
+    if case == 0:
+        right.Drive(0,0)
+        left.Drive(1,160)
+        x = data(lidar.getPoints(ser_lidar, polar = True))
 
         print(x[0,0])
+        while ((x[0,0] > 1000 and x[0,0] <2000) == False):
+            
+            
+##            print('case is', color(ser_color, case))
+            print('turning to center')
+            if x[0,0] > 1000 and x[0,0] <2000:
+                break
+            else:
+                x = data(lidar.getPoints(ser_lidar, polar = True))
 
-        
-    #zero point turn    
-##    right.Drive(0,0)
-##    left.Drive(1,L_straight)
-    
-    x = data(lidar.getPoints(ser, polar = True))
-    angle = angle_calc(x,325)
-    
-##    while(x[angle,1] > 275):
-##        x = data(lidar.getPoints(ser, polar = True))
-##        angle = angle_calc(x,270)
+                print(x[0,0])
+                
+        print('turned to center')
+        right.Drive(0,0)
+        left.Drive(1,0)
 
+        sleep(.5)
 
-    right.Drive(0,R_straight)
-    left.Drive(0,L_straight)
+        print(x[0,0])
+        while(x[0,0] > 800):
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight)
+            x = data(lidar.getPoints(ser_lidar, polar = True))
 
-    while(x[angle, 0] > 1000):
-        x = data(lidar.getPoints(ser, polar = True))
-        angle = angle_calc(x,270)
-        while(x[angle,1] > 275):
-            x = data(lidar.getPoints(ser, polar = True))
-            angle = angle_calc(x,270)
-        print('distance in loop',x[angle,0])
-        print('angle in loop',x[angle,1])
+            print(x[0,0])
 
-    ########
-    # Begin circling center
-    #######
-    print('circling center')
-    while True:
-
-        
-##        x = data(lidar.getPoints(ser, polar = True))
-##        deg_225 = angle_calc(x,265)
-##        deg_325 = angle_calc(x,275)
-##        
-##        right.Drive(0,R_straight)
-##        left.Drive(1,L_straight)
-##
-##        while x[deg_225,0] < 1000:
-##            print('i see the center')
-##            x = data(lidar.getPoints(ser, polar = True))
-##            deg_225 = angle_calc(x,225)
-##
-##        
-##        right.Drive(0,0)
-##        left.Drive(1,L_straight)
-##        x = data(lidar.getPoints(ser, polar = True))
-##        deg_325 = angle_calc(x,325)
-        
-##        while x[deg_225,0] > 1000:
-##            print('turning towards center')
-##            x = data(lidar.getPoints(ser, polar = True))
-##            deg_225 = angle_calc(x,325)
-        
-        
-        
-############################################################################ 
-        dist_low = 200
-        dist_high = 1000
-        slice_width = 1
-        slice_angle = 290
-        turn_modify = 0
-        orbit_corr = 0
-        R_turn = 0
-        L_turn = 0
+        x = data(lidar.getPoints(ser_lidar, polar = True))
+        angle = angle_calc(x,325)
         
         right.Drive(0,R_straight)
-        left.Drive(1,L_straight + orbit_corr)
+        left.Drive(0,L_straight)
 
-        x = data(lidar.getPoints(ser, polar = True))
-        dist2 = distance_slice(x, slice_angle, slice_width)
-##        dist1 = distance_slice(x, slice_angle, slice_width)
+        while(x[angle, 0] > 900):
+            x = data(lidar.getPoints(ser_lidar, polar = True))
+            angle = angle_calc(x,270)
+            while(x[angle,1] > 275):
+                x = data(lidar.getPoints(ser_lidar, polar = True))
+                angle = angle_calc(x,270)
+            print('distance in loop',x[angle,0])
+            print('angle in loop',x[angle,1])
+        case = 1
 
-##        while(np.min(dist2) > dist_low and np.average(dist2) < dist_high):
-        while np.min(dist2) < 900:
-            x = data(lidar.getPoints(ser, polar = True))
-            dist2 = distance_slice(x, slice_angle, slice_width)
-            print('I see the center')
-##
-        while np.min(dist2) > 900:
-            right.Drive(0,0)
-            left.Drive(1,L_straight)
-            x = data(lidar.getPoints(ser, polar = True))
-            dist2 = distance_slice(x, slice_angle, slice_width)
-            print('turning towards center')
+    # case 1
+    if case == 1:
         
+        print('circling center')
         
-##        if np.min(dist2) < dist_low:
-####            driveRight(R_straight,turn_modify)
-##            right.Drive(0,R_straight + turn_modify)
-##            left.Drive(0,L_straight)
-##            print('too close')
-##        elif np.min(dist2) > dist_high:
-####            driveLeft(L_straight,turn_modify)
-##            right.Drive(0,R_straight)
-##            left.Drive(0,L_straight + turn_modify)
-##            print('too far')
-
-
-########################################################################################
+        while True:
+            dist_low = 200
+            dist_high = 1000
+            slice_width = 1
+            slice_angle = 290
+            turn_modify = 0
+            orbit_corr = 0
+            R_turn = 0
+            L_turn = 0
             
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight + orbit_corr)
+
+            x = data(lidar.getPoints(ser_lidar, polar = True))
+            dist2 = distance_slice(x, slice_angle, slice_width)
+
+##            case = color(ser_color,case)
+            
+            while np.min(dist2) < 900:
+                
+                x = data(lidar.getPoints(ser_lidar, polar = True))
+                dist2 = distance_slice(x, slice_angle, slice_width)
+                
+##                case = color(ser_color, case)
+                print('I see the center')
     
+            while np.min(dist2) > 900:
+                
+                right.Drive(0,0)
+                left.Drive(1,L_straight)
+                x = data(lidar.getPoints(ser_lidar, polar = True))
+                dist2 = distance_slice(x, slice_angle, slice_width)
+                
+##                case = color(ser_color, case)
+                print('turning towards center')
+            
+    if case == 2:
+        while True:
+            print('you have entered the dark place')
+            
     
 except KeyboardInterrupt:
     print("Exiting")

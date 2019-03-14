@@ -1,7 +1,7 @@
 import serial
 import numpy
 
-ser = serial.Serial('/dev/ttyACM0',115200)
+ser = serial.Serial('/dev/ttyACM0',9600)
 s = [0]
 
 while True:

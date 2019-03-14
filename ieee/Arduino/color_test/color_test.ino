@@ -1,4 +1,5 @@
 #include <string.h>
+#include <Sensor.h>
 
 #define aS0 53
 #define aS1 51
@@ -23,7 +24,7 @@ int bGreenFrequency = 0;
 int bBlueFrequency = 0;
 int bOut = 0;
 
-int scale = 1;
+//int scale = 10;
 
 void setup() {
   // put your setup code here, to run once:
@@ -97,53 +98,124 @@ void loop() {
   //delay(100);
 
 
-  aRedFrequency = aRedFrequency * scale;
-  aBlueFrequency = aBlueFrequency * scale;
-  aGreenFrequency = aGreenFrequency * scale;
-
-  bRedFrequency = bRedFrequency * scale;
-  bBlueFrequency = bBlueFrequency * scale;
-  bGreenFrequency = bGreenFrequency * scale;
+//  aRedFrequency = aRedFrequency * scale;
+//  aBlueFrequency = aBlueFrequency * scale;
+//  aGreenFrequency = aGreenFrequency * scale;
+//
+//  bRedFrequency = bRedFrequency * scale;
+//  bBlueFrequency = bBlueFrequency * scale;
+//  bGreenFrequency = bGreenFrequency * scale;
 
   
   
 //  aOut = (aRedFrequency + aBlueFrequency + aGreenFrequency)/3;
 //  bOut = (bRedFrequency + bBlueFrequency + bGreenFrequency)/3;
 //  Serial.println(color_processing(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + color_processing(bRedFrequency,bGreenFrequency,bBlueFrequency));
-  Serial.println(color_processing(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + String(aRedFrequency) + "^" + String(aGreenFrequency) + "^" + String(aBlueFrequency));
-  
-//  Serial.println(aRedFrequency);
-  
+//  Serial.println(tapeColor(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + String(aRedFrequency) + "^" + String(aGreenFrequency) + "^" + String(aBlueFrequency));
+//  Serial.println(String(bRedFrequency) + "^" + String(bGreenFrequency) + "^" + String(bBlueFrequency));
+
+//  Serial.println(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency));
+  Serial.println(tapeColor(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency)) + "^" + blockColor(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency)));
+//  Serial.println(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency));
 }
 
-String color_processing(int r, int g, int b)
+int grayscale(int r,int g,int b)
 {
+  int scale = 10;
 
-  if ((r < 80) and (g < 80) and (b < 80))
+  return (r*scale + g*scale + b*scale)/3;
+}
+
+String tapeColor(int g)
+{
+  if(g > 2000)
   {
-    return "w";
+    return "x";
   }
 
-  else if ((r < 120) and (g > 150) and (b > 200))
+  else
+  {
+    return "c";
+  }
+
+//
+//  if(g < 900 and g > 800)
+//  {
+//    return "y";
+//  }
+//  
+//  else if(g > 2900)
+//  {
+//    return "r";
+//  }
+//
+//  else if(g > 1600 and g < 1700)
+//  {
+//    return "b";
+//  }
+//
+//  else if(g > 1230 and g < 1320)
+//  {
+//    return "g";
+//  }
+//  
+//  else if(g > 500 and g < 800)
+//  {
+//    return "w";
+//  }
+//  
+//  else
+//  {
+//    return "x";
+//  }
+}
+
+String blockColor(int g)
+{
+//  if((r < 55) and (g > 80) and (b < 85))
+//  {
+//    return "r";
+//  }
+//
+//  else if((r < 50) and (g < 80) and (b < 80))
+//  {
+//    return "y";
+//  }
+//
+//  else if((r > 75) and (g > 100) and (b > 90))
+//  {
+//    return "b";
+//  }
+//
+//  else if((r < 75) and (g < 100) and (b < 100))
+//  {
+//    return "g";
+//  }
+//
+//  else
+//  {
+//    return "x";
+//  }
+
+  if(g < 650)
+  {
+    return "y";
+  }
+  
+  else if(g > 1180 and g < 1210)
   {
     return "r";
   }
 
-  else if ((r > 230) and (b < 100) and (g > 120 ))
+  else if(g > 880 and g < 940)
   {
     return "b";
   }
-   
-  else if ((r > 175) and (g < 120) and (b > 190 ))
+
+  else if(g > 1230 and g < 1280)
   {
     return "g";
   }
-
-  else if ((r < 90) and (b < 170) and (g < 120 ))
-  {
-    return "y";
-  }
-
   else
   {
     return "x";
