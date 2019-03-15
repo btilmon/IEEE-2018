@@ -116,7 +116,7 @@ void loop() {
 
 //  Serial.println(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency));
   Serial.println(tapeColor(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency)) + "^" + blockColor(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency)));
-//  Serial.println(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency));
+  Serial.println(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency));
 }
 
 int grayscale(int r,int g,int b)
