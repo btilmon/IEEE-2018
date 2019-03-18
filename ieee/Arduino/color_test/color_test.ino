@@ -14,109 +14,45 @@
 #define bSensorOut 29
 #define enable 23
 
-int aRedFrequency = 0;
-int aGreenFrequency = 0;
-int aBlueFrequency = 0;
-int aOut = 0;
-
-int bRedFrequency = 0;
-int bGreenFrequency = 0;
-int bBlueFrequency = 0;
-int bOut = 0;
+//Make instance of sensor class with hardware addresses
+//-1 means this pin is not used
+Sensor sense1(aS2,aS3,aSensorOut,-1);
+Sensor sense2(bS2,bS3,bSensorOut,enable);
 
 //int scale = 10;
 
 void setup() {
   // put your setup code here, to run once:
+
+  // These pins are currently controlled by arduino
+  // will be re-done to use DIP switches or jumpers
   pinMode(aS0, OUTPUT);
   pinMode(aS1, OUTPUT);
-  pinMode(aS2, OUTPUT);
-  pinMode(aS3, OUTPUT);
-
-  pinMode(bS0, OUTPUT);
-  pinMode(bS1, OUTPUT);
-  pinMode(bS2, OUTPUT);
-  pinMode(bS3, OUTPUT);
-  
-  pinMode(enable, OUTPUT);
-  
-  pinMode(aSensorOut, INPUT);
-  pinMode(bSensorOut, INPUT);
-  
   digitalWrite(aS0, HIGH);
   digitalWrite(aS1, LOW);
-
+  pinMode(bS0, OUTPUT);
+  pinMode(bS1, OUTPUT);
   digitalWrite(bS0, HIGH);
   digitalWrite(bS1, LOW);
+
+  //Normal setup
+
+  //Mesure ambient light, and calculate a gain value for output values
+  sense1.ambient();
+  sense2.ambient();
 
   Serial.begin(9600);
 }
 
-void loop() {
+void loop() 
+{
   // put your main code here, to run repeatedly:
 
-  //enable pin
-  digitalWrite(enable, LOW);
-  
-  digitalWrite(aS2, LOW);
-  digitalWrite(aS3, LOW);
+  // The Sensor class returns the raw data from the Arduino.pulseIn method multiplied by a gain value calculated with the Sensor.ambient method.
+  // Arduino.pulseIn returns PWM pulse length in micro seconds.
 
-  digitalWrite(bS2, LOW);
-  digitalWrite(bS3, LOW);
-
-  aRedFrequency = pulseIn(aSensorOut, LOW);
-  bRedFrequency = pulseIn(bSensorOut, LOW);
-  
-
-  //Serial.print("R = ");
-  //Serial.print(redFrequency);
-  //delay(100);
-
-  digitalWrite(aS2, HIGH);
-  digitalWrite(aS3, HIGH);
-
-  digitalWrite(bS2, HIGH);
-  digitalWrite(bS3, HIGH);
-
-  aGreenFrequency = pulseIn(aSensorOut, LOW);
-  bGreenFrequency = pulseIn(bSensorOut, LOW);
-  //Serial.print("G = ");
-  //Serial.print(greenFrequency);
-  //delay(100);
-
-  digitalWrite(aS2, LOW);
-  digitalWrite(aS3, HIGH);
-
-  digitalWrite(bS2, LOW);
-  digitalWrite(bS3, HIGH);
-  
-  aBlueFrequency = pulseIn(aSensorOut, LOW);
-  bBlueFrequency = pulseIn(bSensorOut, LOW);
-
-  //Serial.print("B = ");
-  //Serial.println(blueFrequency);
-  //delay(100);
-
-
-//  aRedFrequency = aRedFrequency * scale;
-//  aBlueFrequency = aBlueFrequency * scale;
-//  aGreenFrequency = aGreenFrequency * scale;
-//
-//  bRedFrequency = bRedFrequency * scale;
-//  bBlueFrequency = bBlueFrequency * scale;
-//  bGreenFrequency = bGreenFrequency * scale;
-
-  
-  
-//  aOut = (aRedFrequency + aBlueFrequency + aGreenFrequency)/3;
-//  bOut = (bRedFrequency + bBlueFrequency + bGreenFrequency)/3;
-//  Serial.println(color_processing(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + color_processing(bRedFrequency,bGreenFrequency,bBlueFrequency));
-//  Serial.println(tapeColor(aRedFrequency,aGreenFrequency,aBlueFrequency) + "^" + String(aRedFrequency) + "^" + String(aGreenFrequency) + "^" + String(aBlueFrequency));
-//  Serial.println(String(bRedFrequency) + "^" + String(bGreenFrequency) + "^" + String(bBlueFrequency));
-
-//  Serial.println(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency));
-  Serial.println(tapeColor(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency)) + "^" + blockColor(grayscale(bRedFrequency, bGreenFrequency, bBlueFrequency)));
-  Serial.println(grayscale(aRedFrequency, aGreenFrequency, aBlueFrequency));
+  Serial.println(tapeColor(grayscale(sense1.readR(), sense1.readG(), sense1.readB())) + "^" + blockColor(grayscale(sense2.readR(), sense2.readG(), sense2.readB())));
+  Serial.println(grayscale(sense1.readR(), sense1.readG(), sense1.readB()));
 }
 
 int grayscale(int r,int g,int b)
