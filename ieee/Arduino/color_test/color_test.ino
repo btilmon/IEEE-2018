@@ -1,5 +1,7 @@
 #include <string.h>
-#include <Sensor.h>
+#include <Arduino.h>
+#include "Sensor.h"
+
 
 #define aS0 53
 #define aS1 51
@@ -53,6 +55,7 @@ void loop()
 
   Serial.println(tapeColor(grayscale(sense1.readR(), sense1.readG(), sense1.readB())) + "^" + blockColor(grayscale(sense2.readR(), sense2.readG(), sense2.readB())));
   Serial.println(grayscale(sense1.readR(), sense1.readG(), sense1.readB()));
+  //Serial.println("work pls");
 }
 
 int grayscale(int r,int g,int b)
