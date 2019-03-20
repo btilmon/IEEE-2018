@@ -83,6 +83,10 @@ def driveLeft(x,increase):
     delta = x + increase
     return left.Drive(0,delta)
 
+def stop():
+    right.Drive(0,0)
+    left.Drive(0,0)
+
 def color(raw):
     '''
     reads color sensor data from arduino
@@ -127,8 +131,7 @@ try:
                 print(x[0,0])
                 
         print('turned to center')
-        right.Drive(0,0)
-        left.Drive(1,0)
+        stop()
 
         sleep(.5)
 
@@ -160,8 +163,9 @@ try:
     if case == 1:
         
         print('circling center')
-        
-        while True:
+        start = time.time()
+        end = time.time()
+        while ((start-end)<30):
             dist_low = 200
             dist_high = 1000
             slice_width = 1
@@ -197,15 +201,35 @@ try:
 ##                case = color(ser_color, case)
                 print('turning towards center')
             
+            end = time.time()
+
     if case == 2:
-        while True:
-            print('you have entered the dark place')
-            
+        slice_width = 10
+
+        x = data(lidar.getPoints(ser_lidar, polar = True))
+        dist3 = distance_slice(x, 10, slice_width)
+
+        i = 1
+        while (dist3[i] > dist3[0])
+            right.Drive(1,R_straight)
+            left.Drive(0,L_straight)
+
+            x = data(lidar.getPoints(ser_lidar, polar = True))
+            dist3 = distance_slice(x, 10, slice_width)
+
+        stop()
+
+        x = data(lidar.getPoints(ser_lidar, polar = True))
+
+        while(x[0,0] > 200)
+            right.Drive(0,R_straight)
+            left.Drive(0,L_straight)
+
+        stop()    
     
 except KeyboardInterrupt:
     print("Exiting")
 
-    right.Drive(0,0)
-    left.Drive(0,0)
+    stop()
     left.Stop()
     right.Stop()
