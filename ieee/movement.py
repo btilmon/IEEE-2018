@@ -33,7 +33,7 @@ left.Inverse()
 ########### motor speeds#######
 # straight
 L_straight = 230
-R_straight = 223
+R_straight = 227
 
 
 
@@ -113,128 +113,154 @@ cases:
 try:
     
     case = 0
-    
-##    case = color(data)
-    print('case is',case)
-    
-    #case 0
-    if case == 0:
-        right.Drive(0,0)
-        left.Drive(1,160)
-        x = read()
-
-        print(x[0,0])
-        while ((x[0,0] > 1000 and x[0,0] <2000) == False):
-            
-            
-##            print('case is', color(ser_color, case))
-            print('turning to center')
-            if x[0,0] > 1000 and x[0,0] <2000:
-                break
-            else:
-                x = read()
-
-                print(x[0,0])
-                
-        print('turned to center')
-        stop()
-
-        sleep(.5)
-
-        print(x[0,0])
-        while(x[0,0] > 800):
-            right.Drive(0,R_straight)
-            left.Drive(1,L_straight)
+    while True:
+    ##    case = color(data)
+        print('case = ', case)
+        
+        #case 0
+        if case == 0:
+            right.Drive(0,0)
+            left.Drive(1,160)
             x = read()
 
             print(x[0,0])
-
-        x = read()
-        angle = angle_calc(x,325)
-        
-        right.Drive(0,R_straight)
-        left.Drive(0,L_straight)
-
-        while(x[angle, 0] > 900):
-            x = read()
-            angle = angle_calc(x,270)
-            while(x[angle,1] > 275):
-                x = read()
-                angle = angle_calc(x,270)
-            print('distance in loop',x[angle,0])
-            print('angle in loop',x[angle,1])
-        case = 1
-
-    # case 1
-    if case == 1:
-        
-        print('circling center')
-        start = time.time()
-        end = time.time()
-        while ((end-start)<30):
-            dist_low = 200
-            dist_high = 1000
-            slice_width = 1
-            slice_angle = 290
-            turn_modify = 0
-            orbit_corr = 0
-            R_turn = 0
-            L_turn = 0
-            
-            right.Drive(0,R_straight)
-            left.Drive(1,L_straight + orbit_corr)
-
-            x = read()
-            dist2 = distance_slice(x, slice_angle, slice_width)
-
-##            case = color(ser_color,case)
-            
-            while np.min(dist2) < 900 && end-start < 30:
+            while ((x[0,0] > 1000 and x[0,0] <2000) == False):
                 
-                x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
                 
-                print('I see the center')
-                end = time.time()
-    
-            while np.min(dist2) > 900 && end-start < 30:
-                
-                right.Drive(0,0)
+    ##            print('case is', color(ser_color, case))
+                print('turning to center')
+                if x[0,0] > 1000 and x[0,0] <2000:
+                    break
+                else:
+                    x = read()
+
+                    print(x[0,0])
+                    
+            print('turned to center')
+            stop()
+
+            sleep(.5)
+
+            print(x[0,0])
+            while(x[0,0] > 800):
+                right.Drive(0,R_straight)
                 left.Drive(1,L_straight)
                 x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
 
-                print('turning towards center')
-                end = time.time()
-
-            end = time.time()
-
-        case = 2
-
-    if case == 2:
-
-        stop()
-
-        x = read()
-        dist3 = distance_slice(x, 10, slice_width)
-
-        while (x[5,0] > x[0,0]):
-            right.Drive(1,R_straight)
-            left.Drive(0,L_straight)
+                print(x[0,0])
 
             x = read()
-
-        stop()
-
-        x = read()
-
-        while(x[0,0] > 200)
+            angle = angle_calc(x,295)
+            
             right.Drive(0,R_straight)
             left.Drive(0,L_straight)
 
-            x = read()
+            while(x[angle, 0] > 700):
+                x = read()
+                angle = angle_calc(x,270)
+                while(x[angle,1] > 275):
+                    x = read()
+                    angle = angle_calc(x,270)
+                print('distance in loop',x[angle,0])
+                print('angle in loop',x[angle,1])
+            case = 1
 
-        stop()    
+        # case 1
+        if case == 1:
+            print('case = ', case)
+            print('circling center')
+            start = time.time()
+            end = time.time()
+            while ((end-start) < 10):
+                dist_low = 200
+                dist_high = 1000
+                slice_width = 1
+                slice_angle = 290
+                turn_modify = 0
+                orbit_corr = 0
+                R_turn = 0
+                L_turn = 0
+                
+                right.Drive(0,R_straight)
+                left.Drive(1,L_straight + orbit_corr)
+
+                x = read()
+                dist2 = distance_slice(x, slice_angle, slice_width)
+
+    ##            case = color(ser_color,case)
+                
+                while np.min(dist2) < 900 and end-start < 10:
+                    
+                    x = read()
+                    dist2 = distance_slice(x, slice_angle, slice_width)
+                    
+                    print('I see the center')
+                    end = time.time()
+        
+                while np.min(dist2) > 900 and end-start < 10:
+                    
+                    right.Drive(0,0)
+                    left.Drive(1,L_straight)
+                    x = read()
+                    dist2 = distance_slice(x, slice_angle, slice_width)
+
+                    print('turning towards center')
+                    end = time.time()
+
+                end = time.time()
+
+            case = 2
+
+        if case == 2:
+            print('case = ', case)
+            stop()
+
+            x = read()
+            right.Drive(0,200)
+            left.Drive(1,0)
+        
+
+            while (x[0,0] > x[12,0]):
+                x = read()
+                
+            stop()
+            
+            right.Drive(0,200)
+            left.Drive(1,0)    
+                
+            while (x[12,0] > x[0,0]):
+                x = read()
+
+            stop()
+            sleep(1)
+            
+            x = read()
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight)
+            while(x[0,0] > 600):
+                x = read()
+
+            stop()
+            
+            right.Drive(0,R_straight-50)
+            left.Drive(0,L_straight-50)
+            
+            while (x[0,0] < 2000):
+                x = read()
+                
+            stop()
+            sleep(1)
+            
+            right.Drive(0,R_straight-70)
+            left.Drive(0,L_straight-70)
+            
+            while((x[0,0] > 1000 and x[0,0] < 2000) == False):
+                    x = read()
+                    
+            stop()
+            sleep(1)
+            
+            case = 0
     
 except KeyboardInterrupt:
     print("Exiting")
