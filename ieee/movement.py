@@ -87,6 +87,12 @@ def stop():
     right.Drive(0,0)
     left.Drive(0,0)
 
+def read():
+    x = data(lidar.getPoints(ser_lidar, polar = True))
+    while (x.size < 100):
+        x = data(lidar.getPoints(ser_lidar, polar = True))
+    return x
+
 def color(raw):
     '''
     reads color sensor data from arduino
@@ -115,7 +121,7 @@ try:
     if case == 0:
         right.Drive(0,0)
         left.Drive(1,160)
-        x = data(lidar.getPoints(ser_lidar, polar = True))
+        x = read()
 
         print(x[0,0])
         while ((x[0,0] > 1000 and x[0,0] <2000) == False):
@@ -126,7 +132,7 @@ try:
             if x[0,0] > 1000 and x[0,0] <2000:
                 break
             else:
-                x = data(lidar.getPoints(ser_lidar, polar = True))
+                x = read()
 
                 print(x[0,0])
                 
@@ -139,21 +145,21 @@ try:
         while(x[0,0] > 800):
             right.Drive(0,R_straight)
             left.Drive(1,L_straight)
-            x = data(lidar.getPoints(ser_lidar, polar = True))
+            x = read()
 
             print(x[0,0])
 
-        x = data(lidar.getPoints(ser_lidar, polar = True))
+        x = read()
         angle = angle_calc(x,325)
         
         right.Drive(0,R_straight)
         left.Drive(0,L_straight)
 
         while(x[angle, 0] > 900):
-            x = data(lidar.getPoints(ser_lidar, polar = True))
+            x = read()
             angle = angle_calc(x,270)
             while(x[angle,1] > 275):
-                x = data(lidar.getPoints(ser_lidar, polar = True))
+                x = read()
                 angle = angle_calc(x,270)
             print('distance in loop',x[angle,0])
             print('angle in loop',x[angle,1])
@@ -165,7 +171,7 @@ try:
         print('circling center')
         start = time.time()
         end = time.time()
-        while ((start-end)<30):
+        while ((end-start)<30):
             dist_low = 200
             dist_high = 1000
             slice_width = 1
@@ -178,52 +184,55 @@ try:
             right.Drive(0,R_straight)
             left.Drive(1,L_straight + orbit_corr)
 
-            x = data(lidar.getPoints(ser_lidar, polar = True))
+            x = read()
             dist2 = distance_slice(x, slice_angle, slice_width)
 
 ##            case = color(ser_color,case)
             
-            while np.min(dist2) < 900:
+            while np.min(dist2) < 900 && end-start < 30:
                 
-                x = data(lidar.getPoints(ser_lidar, polar = True))
+                x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
-##                case = color(ser_color, case)
                 print('I see the center')
+                end = time.time()
     
-            while np.min(dist2) > 900:
+            while np.min(dist2) > 900 && end-start < 30:
                 
                 right.Drive(0,0)
                 left.Drive(1,L_straight)
-                x = data(lidar.getPoints(ser_lidar, polar = True))
+                x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
-                
-##                case = color(ser_color, case)
+
                 print('turning towards center')
-            
+                end = time.time()
+
             end = time.time()
 
+        case = 2
+
     if case == 2:
-        slice_width = 10
-
-        x = data(lidar.getPoints(ser_lidar, polar = True))
-        dist3 = distance_slice(x, 10, slice_width)
-
-        i = 1
-        while (dist3[i] > dist3[0])
-            right.Drive(1,R_straight)
-            left.Drive(0,L_straight)
-
-            x = data(lidar.getPoints(ser_lidar, polar = True))
-            dist3 = distance_slice(x, 10, slice_width)
 
         stop()
 
-        x = data(lidar.getPoints(ser_lidar, polar = True))
+        x = read()
+        dist3 = distance_slice(x, 10, slice_width)
+
+        while (x[5,0] > x[0,0]):
+            right.Drive(1,R_straight)
+            left.Drive(0,L_straight)
+
+            x = read()
+
+        stop()
+
+        x = read()
 
         while(x[0,0] > 200)
             right.Drive(0,R_straight)
             left.Drive(0,L_straight)
+
+            x = read()
 
         stop()    
     
