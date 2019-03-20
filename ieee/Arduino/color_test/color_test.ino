@@ -1,16 +1,11 @@
 #include <string.h>
-#include <Arduino.h>
-#include "Sensor.h"
+#include <Sensor.h>
 
 
-#define aS0 53
-#define aS1 51
 #define aS2 49
 #define aS3 47
 #define aSensorOut 45
 
-#define bS0 37
-#define bS1 35
 #define bS2 33
 #define bS3 31
 #define bSensorOut 29
@@ -18,51 +13,24 @@
 
 //Make instance of sensor class with hardware addresses
 //-1 means this pin is not used
-Sensor sense1(aS2,aS3,aSensorOut,-1);
-Sensor sense2(bS2,bS3,bSensorOut,enable);
-
-//int scale = 10;
+Sensor sense1;
+Sensor sense2;
 
 void setup() {
+  Serial.begin(9600);
   // put your setup code here, to run once:
 
-  // These pins are currently controlled by arduino
-  // will be re-done to use DIP switches or jumpers
-  pinMode(aS0, OUTPUT);
-  pinMode(aS1, OUTPUT);
-  digitalWrite(aS0, HIGH);
-  digitalWrite(aS1, LOW);
-  pinMode(bS0, OUTPUT);
-  pinMode(bS1, OUTPUT);
-  digitalWrite(bS0, HIGH);
-  digitalWrite(bS1, LOW);
-
-  //Normal setup
-
-  //Mesure ambient light, and calculate a gain value for output values
+  sense1.begin(aS2,aS3,aSensorOut,-1);
+  sense2.begin(bS2,bS3,bSensorOut,enable);
   sense1.ambient();
   sense2.ambient();
-
-  Serial.begin(9600);
 }
 
 void loop() 
 {
   // put your main code here, to run repeatedly:
 
-  // The Sensor class returns the raw data from the Arduino.pulseIn method multiplied by a gain value calculated with the Sensor.ambient method.
-  // Arduino.pulseIn returns PWM pulse length in micro seconds.
-
-  Serial.println(tapeColor(grayscale(sense1.readR(), sense1.readG(), sense1.readB())) + "^" + blockColor(grayscale(sense2.readR(), sense2.readG(), sense2.readB())));
-  Serial.println(grayscale(sense1.readR(), sense1.readG(), sense1.readB()));
-  //Serial.println("work pls");
-}
-
-int grayscale(int r,int g,int b)
-{
-  int scale = 10;
-
-  return (r*scale + g*scale + b*scale)/3;
+  Serial.println(tapeColor(sense1.read()) + "^" + blockColor(sense1.read()));
 }
 
 String tapeColor(int g)

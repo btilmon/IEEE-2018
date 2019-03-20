@@ -16,15 +16,15 @@ from LidarPrint import *
 
 port = "/dev/ttyUSB0"
 ser_lidar = serial.Serial(port, 115200, timeout = 0)
-ser_color = serial.Serial("/dev/ttyACM0",9600)
+'''ser_color = serial.Serial("/dev/ttyACM0",9600)'''
 #### Arduino ports #####
 
 ser_lidar.setDTR(False)
 print (ser_lidar.name)
 lidar = Lidar(ser_lidar)
 
-sensors = ser_color.readline().rstrip()
-data = sensors.split('^')
+'''sensors = ser_color.readline().rstrip()'''
+'''data = sensors.split('^')'''
 
 left = Motor.Motor(scan.m1DIR,scan.m1PWM)
 right = Motor.Motor(scan.m2DIR,scan.m2PWM)
