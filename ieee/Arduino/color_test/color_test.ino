@@ -1,11 +1,14 @@
 #include <string.h>
 #include <Sensor.h>
 
-
+#define aS0 53
+#define aS1 51
 #define aS2 49
 #define aS3 47
 #define aSensorOut 45
 
+#define bS0 37
+#define bS1 35
 #define bS2 33
 #define bS3 31
 #define bSensorOut 29
@@ -13,24 +16,22 @@
 
 //Make instance of sensor class with hardware addresses
 //-1 means this pin is not used
-Sensor sense1;
-Sensor sense2;
+Sensor sense1(aS0, aS1, aS2,aS3,aSensorOut,-1,-1);
+Sensor sense2(bS0, bS1, bS2,bS3, bSensorOut, enable, -1);
 
 void setup() {
   Serial.begin(9600);
   // put your setup code here, to run once:
 
-  sense1.begin(aS2,aS3,aSensorOut,-1);
-  sense2.begin(bS2,bS3,bSensorOut,enable);
-  sense1.ambient();
-  sense2.ambient();
+  sense1.begin();
+  sense2.begin();
 }
 
 void loop() 
 {
   // put your main code here, to run repeatedly:
 
-  Serial.println(tapeColor(sense1.read()) + "^" + blockColor(sense1.read()));
+  Serial.println(tapeColor(sense1.read(255)) + "^" + blockColor(sense1.read(255)));
 }
 
 String tapeColor(int g)
