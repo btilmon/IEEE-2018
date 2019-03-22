@@ -33,7 +33,7 @@ left.Inverse()
 ########### motor speeds#######
 # straight
 L_straight = 230
-R_straight = 227
+R_straight = 230
 
 
 
@@ -135,22 +135,26 @@ try:
         if case == 0:
             print('case = ', case)
             
+            angle = 355
+            width = 4
+            
             right.Drive(0,0)
             left.Drive(1,160)
             x = read()
-            dist = zeroSlice(x, 2)
+            dist = distance_slice(x, angle, width)  
             
-            while ((np.min(dist) > 1000 and np.min(dist) <2000) == False):
+            while ((np.min(dist) > 1000 and x[0,0] <2000) == False):
                 
                 
     ##            print('case is', color(ser_color, case))
                 print('turning to center')
-                if np.min(dist) > 1000 and np.min(dist) <2000:
+                print(x[0,0])
+                if x[0,0] > 1000 and x[0,0] < 2000:
                     break
                 else:
                     x = read()
-                    dist = zeroSlice(x, 2)
-                    print(dist)
+                    
+                    
                     
             print('turned to center')
             stop()
@@ -158,25 +162,36 @@ try:
             sleep(.5)
 
             x = read()
-            dist = zeroSlice(x, 1)
-            while(np.min(dist) > 800):
+            angle1 = 29
+            width1 = 28
+            angle2 = 360 - angle1
+            
+            dist1 = distance_slice(x, angle1, width1)
+            dist2 = distance_slice(x, angle2, width1) 
+            
+            while((np.min(dist1) > 700) and (np.min(dist2) > 700)):
                 right.Drive(0,R_straight)
                 left.Drive(1,L_straight)
                 x = read()
-                dist = zeroSlice(x, 1)
+                dist1 = distance_slice(x, angle1, width1)
+                dist2 = distance_slice(x, angle2, width1) 
 
                 print(x[0,0])
 
 
             
-            right.Drive(0,R_straight)
-            left.Drive(0,L_straight)
+            right.Drive(0,170)
+            left.Drive(0,170)
 
             x = read()
-            angle = angle_calc(x,295)
+            angle = 295
             dist = distance_slice(x, 295, 5)
             
-            while(np.min(dist) > 700):
+            while(np.min(dist) < 800):
+                x = read()
+                dist = distance_slice(x, 295, 5)
+                
+            while(np.min(dist) > 800):
                 x = read()
                 dist = distance_slice(x, 295, 5)
 
@@ -227,92 +242,135 @@ try:
                     end = time.time()
 
                 end = time.time()
-
+            stop()
             case = 2
 
         #case 2
-        #~ if case == 2:
-            #~ print('case = ', case)
-            #~ stop()
+        if case == 2:
+            print('case = ', case)
 
-            #~ x = read()
-            #~ right.Drive(0,200)
-            #~ left.Drive(1,0)
-        
 
-            #~ while (x[0,0] > x[15,0]):
-                #~ x = read()
+            
+            angle1 = 35
+            angle2 = 25
+            width = 4
+            
+            x = read()
+            dist1 = distance_slice(x,angle1,width)
+            #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
+            dist2 = distance_slice(x,angle2, width)
+            
+            right.Drive(0,170)
+            left.Drive(0,170)
+            
+            
+            while any(dist2 > dist1) == True:
+                x = read()
+                dist1 = distance_slice(x,angle1,width)
+                dist2 = distance_slice(x,angle2, width)
                 
-            #~ stop()
-            
-            #~ right.Drive(0,200)
-            #~ left.Drive(1,0)    
+            while any(dist2 < dist1) == True:
+                x = read()
+                dist1 = distance_slice(x,angle1,width)
+                dist2 = distance_slice(x,angle2, width)
                 
-            #~ while (x[15,0] > x[0,0]):
-                #~ x = read()
-
-            #~ stop()
-
             
-            #~ x = read()
-            #~ right.Drive(0,R_straight)
-            #~ left.Drive(1,L_straight)
-            #~ while(x[0,0] > 700):
+            #~ while any(deriv < 0) == True:
+                #~ print('deriv 2 is',deriv)
                 #~ x = read()
-
-            #~ stop()
-            
-            #~ right.Drive(0,R_straight-100)
-            #~ left.Drive(0,L_straight-100)
-            
-            #~ while (x[0,0] < 2000 and x[0,0] != 3000):
-                #~ x = read()
+                #~ dist1 = distance_slice(x,angle1,width)
+                #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
+              
                 
             #~ x = read()
-            #~ a = angle_calc(x, 0)
-            #~ right.Drive(0,R_straight-100)
-            #~ left.Drive(0,L_straight-100)    
-            #~ print(x[a,0])
-            
-            #~ while ((x[a,0] > 800 and x[a,0] <2000) == False):
-            
-#~ ##            print('case is', color(ser_color, case))
-                #~ print('turning to center')
-                #~ if x[a,0] > 800 and x[a,0] <2000:
-                    #~ break
-                #~ else:
-                    #~ x = read()
+            #~ dist1 = distance_slice(x,angle1,width)
+            #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
 
-                    
+            #~ while all(deriv > 0) == True:
+                #~ print('deriv 4 is',deriv)
+
+
+                #~ x = read()
+                #~ dist1 = distance_slice(x,angle1,width)
+                #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
+            
+            x = read()
+            
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight)
+            
+            while x[0,0] > 700:
+                x = read()
+            
+            stop()
+            
+            right.Drive(0,150)
+            left.Drive(0,150)
+            
+            x = read()
+            
+            while x[0,0] < 2000:
+                x = read()
+            
+            
+            while ((x[0,0] > 1000 and x[0,0] <2000) == False):
                 
-            #~ print('turned to center')
-            #~ stop()
+                
+    ##            print('case is', color(ser_color, case))
+                print('turning to center')
+                print(x[0,0])
+                if x[0,0] > 700 and x[0,0] < 2000:
+                    break
+                else:
+                    x = read()
+            stop()
+            
+            sleep(.5)
 
-            #~ sleep(.5)
+            x = read()
+            
+            angle1 = 31
+            width1 = 30
+            angle2 = 360 - angle1
+            
+            dist1 = distance_slice(x, angle1, width1)
+            dist2 = distance_slice(x, angle2, width1) 
+            
+            while((np.min(dist1) > 700) and (np.min(dist2) > 700)):
+                right.Drive(0,R_straight)
+                left.Drive(1,L_straight)
+                x = read()
+                dist1 = distance_slice(x, angle1, width1)
+                dist2 = distance_slice(x, angle2, width1) 
 
-            #~ print(x[0,0])
-            #~ while(x[0,0] > 800):
-                #~ right.Drive(0,R_straight)
-                #~ left.Drive(1,L_straight)
-                #~ x = read()
+                print(x[0,0])
 
-                #~ print(x[0,0])
 
-            #~ x = read()
-            #~ angle = angle_calc(x,295)
-        
-            #~ right.Drive(0,R_straight)
-            #~ left.Drive(0,L_straight)
+            
+            right.Drive(0,170)
+            left.Drive(0,170)
 
-            #~ while(x[angle, 0] > 700):
-                #~ x = read()
-                #~ angle = angle_calc(x,270)
-                #~ while(x[angle,1] > 275):
-                    #~ x = read()
-                    #~ angle = angle_calc(x,270)
-                #~ print('distance in loop',x[angle,0])
-                #~ print('angle in loop',x[angle,1])
-            #~ case = 1
+            x = read()
+            angle = 295
+            dist = distance_slice(x, 295, 5)
+            
+            while(np.min(dist) < 800):
+                x = read()
+                dist = distance_slice(x, 295, 5)
+                
+            while(np.min(dist) > 800):
+                x = read()
+                dist = distance_slice(x, 295, 5)
+
+                print('positioning to center')
+            print('positioned!')    
+            case = 1
+            
+
+            
+            
+            
+           
             
            
     
