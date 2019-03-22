@@ -135,7 +135,7 @@ try:
         if case == 0:
             print('case = ', case)
             
-            angle = 355
+            angle = 350
             width = 4
             
             right.Drive(0,0)
@@ -143,7 +143,7 @@ try:
             x = read()
             dist = distance_slice(x, angle, width)  
             
-            while ((np.min(dist) > 1000 and x[0,0] <2000) == False):
+            while ((x[0,0] > 1000 and x[0,0] <2000) == False):
                 
                 
     ##            print('case is', color(ser_color, case))
@@ -162,16 +162,26 @@ try:
             sleep(.5)
 
             x = read()
-            angle1 = 29
-            width1 = 28
+            angle1 = 20
+            width1 = angle1 - 1
             angle2 = 360 - angle1
             
             dist1 = distance_slice(x, angle1, width1)
             dist2 = distance_slice(x, angle2, width1) 
             
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight)
+            
+            while((np.min(dist1) < 700) and (np.min(dist2) < 700)):
+
+                x = read()
+                dist1 = distance_slice(x, angle1, width1)
+                dist2 = distance_slice(x, angle2, width1) 
+
+                print(x[0,0])
+            
             while((np.min(dist1) > 700) and (np.min(dist2) > 700)):
-                right.Drive(0,R_straight)
-                left.Drive(1,L_straight)
+
                 x = read()
                 dist1 = distance_slice(x, angle1, width1)
                 dist2 = distance_slice(x, angle2, width1) 
@@ -329,16 +339,26 @@ try:
 
             x = read()
             
-            angle1 = 31
-            width1 = 30
+            angle1 = 20
+            width1 = angle1 - 1
             angle2 = 360 - angle1
             
             dist1 = distance_slice(x, angle1, width1)
             dist2 = distance_slice(x, angle2, width1) 
             
+            right.Drive(0,R_straight)
+            left.Drive(1,L_straight)
+            
+            while((np.min(dist1) < 700) and (np.min(dist2) < 700)):
+
+                x = read()
+                dist1 = distance_slice(x, angle1, width1)
+                dist2 = distance_slice(x, angle2, width1) 
+
+                print(x[0,0])
+            
             while((np.min(dist1) > 700) and (np.min(dist2) > 700)):
-                right.Drive(0,R_straight)
-                left.Drive(1,L_straight)
+
                 x = read()
                 dist1 = distance_slice(x, angle1, width1)
                 dist2 = distance_slice(x, angle2, width1) 
