@@ -9,17 +9,22 @@ class Sensor
 {
     public:
         Sensor(int s0, int s1, int s2, int s3, int out, int enable, int led);
+        Sensor(int s2, int s3, int Out);
+        Sensor();
         void begin();
         void ambient();
-        int read(int pwm);
-        int readR(int pwm);
-        int readG(int pwm);
-        int readB(int pwm);
-        int readK(int pwm);
+        void begin(int s2, int s3, int Out);
+        void setLED(int pwm);
+        int read();
+        int readR();
+        int readG();
+        int readB();
+        int readK();
+        float getGain();
+        float constant;
     private:
         void state(int s);
-        void LED(int PWM);
-        void enable(int PWM);
+        void enable();
         void disable();
         int _s0;
         int _s1;
