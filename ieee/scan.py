@@ -11,18 +11,18 @@ sleep(0)
 lidar = Lidar_Trial.Lidar()
 
 motor = Lidar_Motion.LDRPWM(17)
-#Motor A
-m1DIR = 6
-m1PWM = 13
-#Motor A
-m2DIR = 19
-m2PWM = 26
+#~ #Motor A
+#~ m1DIR = 6
+#~ m1PWM = 13
+#~ #Motor A
+#~ m2DIR = 19
+#~ m2PWM = 26
 
-left = Motor.Motor(m1DIR,m1PWM)
-right = Motor.Motor(m2DIR,m2PWM)
+#~ left = Motor.Motor(m1DIR,m1PWM)
+#~ right = Motor.Motor(m2DIR,m2PWM)
 
-left.Inverse()
-motor.Spin(255)
+#~ left.Inverse()
+#~ motor.Spin(255)
 
 reads = 150
 vals = np.array([])
@@ -92,10 +92,10 @@ try:
             
 
             
-        diff_list = 0 #reset difference array to zero to prepare for new matrix of lidar readings
-        motor.Spin(0)
-        right.Drive(0,0)
-        left.Drive(0,0)
+        #~ diff_list = 0 #reset difference array to zero to prepare for new matrix of lidar readings
+        #~ motor.Spin(0)
+        #~ right.Drive(0,0)
+        #~ left.Drive(0,0)
 ##            left.Stop()
 ##            right.Stop()
                 
@@ -106,9 +106,9 @@ try:
 except KeyboardInterrupt:
     print("Exiting")
     motor.Spin(0)
-    right.Drive(0,0)
-    left.Drive(0,0)
-    left.Stop()
-    right.Stop()
+    #~ right.Drive(0,0)
+    #~ left.Drive(0,0)
+    #~ left.Stop()
+    #~ right.Stop()
 
 
