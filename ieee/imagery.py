@@ -100,22 +100,38 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     #range for lower red
     lower_red = np.array([0,120,70])
     upper_red = np.array([10,255,255])
-    mask1 = cv2.inRange(hsv, lower_red, upper_red)
+    rmask1 = cv2.inRange(hsv, lower_red, upper_red)
     #range for upper red
     lower_red = np.array([170,120,70])
-    upper_red = np.array([180,255,255])
-    mask2 = cv2.inRange(hsv, lower_red, upper_red)    
+    upper_red = np.array([200,255,255])
+    rmask2 = cv2.inRange(hsv, lower_red, upper_red)    
     
-    mask1 = mask1 + mask2
-    mask1 = cv2.morphologyEx(mask1, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
-    mask1 = cv2.morphologyEx(mask1, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))
-    mask2 = cv2.bitwise_not(mask1)
-    res1 = cv2.bitwise_and(image, image, mask = mask1)
+    rmask1 = rmask1 + rmask2
+    rmask1 = cv2.morphologyEx(rmask1, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
+    red = cv2.morphologyEx(rmask1, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))
+    
+    #range for lower green
+    lower_green = np.array([30,65,65])
+    upper_green = np.array([80,255,255])
+    gmask = cv2.inRange(hsv, lower_green, upper_green)
+    #range for upper green
+    #~ lower_green = np.array([170,120,70])
+    #~ upper_green = np.array([180,255,255])
+    #~ gmask2 = cv2.inRange(hsv, lower_green, upper_green)    
+    
+    #~ gmask1 = gmask1 + gmask2
+    gmask = cv2.morphologyEx(gmask, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
+    green = cv2.morphologyEx(gmask, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))    
+    
+    
+    
+    mask = green + red
+    final = cv2.bitwise_and(image, image, mask = mask)
     
 
     
     #~ # show the frame
-    cv2.imshow("Frame", res1)
+    cv2.imshow("Frame", final)
     key = cv2.waitKey(1) & 0xFF
     
     
