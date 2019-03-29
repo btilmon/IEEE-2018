@@ -56,36 +56,7 @@ try:
 ##                    plt.scatter(x[:,1],x[:,0],s=2)
 ##                    plt.ylim(0,1000)
 ##                    plt.show()
-        for i in range(0, x.shape[0]-1):
-            diff = int(np.abs(x[i+1,0] - x[i,0]))
-            diff_list = np.append(diff_list,diff) #append differences to array
 
-        direction = x[np.where(diff_list == np.max(diff_list)),1] #declare angle to move towards
-        distance = x[np.where(diff_list == np.max(diff_list)),0] #distance to attain
-        d_thres = np.arange(distance-15, distance+15)
-##                right.Drive(0,250)
-##                left.Drive(0,200)
-##                print('distance:',distance)
-##                zero = np.array([])
-##                zero = np.append(x[0:5,0],zero)
-##                zero = np.append(x[x.shape[0]-5:x.shape[0],0],zero)
-##                
-##            d_thres = np.arange(distance-15, distance+15)
-####                    print(d_thres)
-##                
-##                if zero.any() == d_thres.any():
-##                    right.Drive(0,0)
-##
-##                    left.Drive(0,0)
-##
-##                sleep(1)
-##                zero1 = x[0,0]
-##
-##                right.Drive(0,255)
-##                left.Drive(0,255)
-##                if zero1 < 700:
-##                    right.Drive(0,0)
-##                    left.Drive(0,0)
 
                 
 

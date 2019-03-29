@@ -237,13 +237,17 @@ try:
                     case = 2
             
 
-            
+            x = read()
             slice_width = 3
             slice_angle = 290
             
+            angle = 10
+            width = 9
+            dist_check = distance_slice(x, angle, width)
+            
             straight()
 
-            x = read()
+            
             dist2 = distance_slice(x, slice_angle, slice_width)
             
             #begin orbiting
@@ -261,7 +265,7 @@ try:
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
-                if x[0,0] < 900:
+                if np.min(dist_check) < 900:
                     case = 0
 #############################################################################################################
 
@@ -332,13 +336,13 @@ try:
 
         
             x = read()
-            angle0 = 30
+            angle = 30
             width = 10
-            dist0 = distance_slice(x, angle0, width)
+            dist = distance_slice(x, angle, width)
             
             leftZP()
             
-            while np.min(dist) < 900:
+            while np.min(dist) < 800:
                 x = read()
                 dist = distance_slice(x, angle, width)        
             

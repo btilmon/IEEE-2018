@@ -3,6 +3,7 @@ import Motor
 import pigpio
 from time import sleep
 
+#############Motion#######################
 #Motor A
 m1in1= 26
 m1in2= 19
@@ -11,42 +12,26 @@ m1PWM = 13
 m2in1 = 21
 m2in2 = 20
 m2PWM = 16
+#Lidar
+ldr = 17
+ldrM = Motor.Motor(ldr)
 
-left = Motor.Motor(m1in1,m1in2,m1PWM)
-right = Motor.Motor(m2in1,m2in2,m2PWM)
+
+left = Motor.Motor(m1PWM,m1in1,m1in2)
+right = Motor.Motor(m2PWM,m2in1,m2in2)
 left.Inverse()
 
-
-
-#~ while True:
-    #~ print("forward")
-    #~ right.Drive(0,255)
-    #~ left.Drive(0,255)
-    #~ sleep(3)
-
-    #~ print("Reverse")
-    #~ right.Drive(1,255)
-    #~ left.Drive(1,255)
-    #~ sleep(3)
+def rightZP():
+    right.Drive(170,0)
+    left.Drive(170,0)
     
-    #~ right.Drive(0,255)
-    #~ left.Drive(1,255)
-    #~ sleep(3)
+def leftZP():
+    right.Drive(170,1)
+    left.Drive(170,1)    
     
-    #~ right.Drive(1,255)
-    #~ left.Drive(0,255)
-    #~ sleep(3)
+def stop():
+    right.Stop()
+    left.Stop()
     
-right.Drive(0,0)
-left.Drive(1,0)
-
-#rightzero point turn
-##while True:
-##        
-##    right.Drive(0,255)
-##    left.Drive(0,255)
-
-#left zero point turn
-##right.Drive(0,0)
-##left.Drive(1,255)
-
+stop()
+ldrM.Stop()

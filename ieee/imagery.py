@@ -21,6 +21,7 @@ import numpy as np
 camera = picamera.PiCamera()
 camera.start_preview()
 camera.capture('/home/pi/Desktop/image.jpg')
+sleep(30)
 camera.stop_preview()
 
 #~ img = np.asarray(Image.open('/home/pi/Desktop/image.jpg').convert('L'))

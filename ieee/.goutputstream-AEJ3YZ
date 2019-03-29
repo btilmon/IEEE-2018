@@ -147,72 +147,72 @@ try:
                 x = read()
                 dist = distance_slice(x, angle, width)
             
-            #~ angle90 = 90
-            #~ spread = 10
+            angle90 = 90
+            spread = 10
             
-            #~ x = read()
-            #~ dist90 = distance_slice(x, angle90, spread)
+            x = read()
+            dist90 = distance_slice(x, angle90, spread)
             
-            #~ rightZP()
+            rightZP()
             
-            #~ while np.min(dist90) > 700:
-                #~ x = read()
-                #~ dist90 = distance_slice(x, angle90, spread)
+            while np.min(dist90) > 700:
+                x = read()
+                dist90 = distance_slice(x, angle90, spread)
             
-            
+            case = 1
 
 
 
 ########################################################
 #######  THIS CODE WORKED WELL ##########################
-            right.Drive(170,0)
-            left.Drive(170,0)
+            #~ right.Drive(170,0)
+            #~ left.Drive(170,0)
 
-            x = read()
-            angle = 295
-            dist = distance_slice(x, 295, 5)
+            #~ x = read()
+            #~ angle = 295
+            #~ dist = distance_slice(x, 295, 5)
             
-            while(np.min(dist) < 800):
-                x = read()
-                dist = distance_slice(x, 295, 5)
+            #~ while(np.min(dist) < 800):
+                #~ x = read()
+                #~ dist = distance_slice(x, 295, 5)
                 
-            while(np.min(dist) > 800):
-                x = read()
-                dist = distance_slice(x, 295, 5)
+            #~ while(np.min(dist) > 800):
+                #~ x = read()
+                #~ dist = distance_slice(x, 295, 5)
 
-            case = 1
+            
 ############################################################
 
         #case 1
         if case == 1:
             print('case = ', case)
             
-            #~ if quadrant%4 == 0:
-                #~ case = 2
+            if quadrant%3 == 0:
+                case = 2
             
-            #~ angle0 = 355
-            #~ spread = 4
+            angle0 = 355
+            spread = 4
             
-            #~ angle90 = 90
-            #~ spread = 5
+            angle90 = 90
+            spread = 5
             
-            #~ x = read()
-            #~ dist0 = distance_slice(x, angle0, spread)
-            #~ dist90 = distance_slice(x, angle90, spread)
+            x = read()
+            dist0 = distance_slice(x, angle0, spread)
+            dist90 = distance_slice(x, angle90, spread)
             
-            #~ straight()
+            straight()
             
-            #~ while np.min(dist0) > 900:
-                #~ x = read()
-                #~ dist0 = distance_slice(x, angle0, spread)
+            while np.min(dist0) > 900:
+                x = read()
+                dist0 = distance_slice(x, angle0, spread)
                 
-            #~ leftZP()
+            leftZP()
             
-            #~ while np.min(dist0) < 1500:
-                #~ x = read()
-                #~ dist0 = distance_slice(x, angle0, spread)                  
+            while np.min(dist0) < 1550:
+                x = read()
+                dist0 = distance_slice(x, angle0, spread)                  
             
-            #~ quadrant = quadrant + 1
+            quadrant = quadrant + 1
             
             
                 
@@ -222,48 +222,57 @@ try:
             #~ start = time.time()
             #~ end = time.time()
             
-            x = read()
-            slice_angle = 180
-            slice_width = 20
-            dist = distance_slice(x, slice_angle, slice_width)
+            #~ x = read()
+            #~ slice_angle = 180
+            #~ slice_width = 20
+            #~ dist = distance_slice(x, slice_angle, slice_width)
             
-            print('quadrant is',quadrant)
+            #~ print('quadrant is',quadrant)
 
-            if (x[0,0] > 1000 and x[0,0] < 1200): 
-                print('congrats, it works! 0 degree=',x[0,0])
-                quadrant = quadrant + 1
+            #~ minm = x[0,0] - 100
+            #~ maxm = x[0,0] + 100
+            #~ if (x[0,0] > 1000 and x[0,0] < 1200): 
+                #~ print('congrats, it works! 0 degree=',x[0,0],'180 degree=',dist)
+                #~ quadrant = quadrant + 1
                 
-                if quadrant%2 == 0:
-                    case = 2
+                #~ if quadrant%3 == 0:
+                    #~ case = 2
             
 
             
-            slice_width = 3
-            slice_angle = 290
+            #~ slice_width = 3
+            #~ slice_angle = 290
+            #~ turn_modify = 0
+            #~ orbit_corr = 0
+            #~ R_turn = 0
+            #~ L_turn = 0
             
-            straight()
+            #~ right.Drive(245,0)
+            #~ left.Drive(245,1)
+            #~ print('im the problem')
 
-            x = read()
-            dist2 = distance_slice(x, slice_angle, slice_width)
+            #~ x = read()
+            #~ dist2 = distance_slice(x, slice_angle, slice_width)
             
-            #begin orbiting
-            while np.min(dist2) < 1000: #900 worked well
+            #~ #begin orbiting
+            #~ while np.min(dist2) < 1100: #900 worked well
                                     
-                x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
+                #~ x = read()
+                #~ dist2 = distance_slice(x, slice_angle, slice_width)
                 
 
     
-            while np.min(dist2) > 1000: #900 worked well
+            #~ while np.min(dist2) > 1100: #900 worked well
                                     
-                right.Stop()
-                left.Drive(245, 1)
-                x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
-                
-                if x[0,0] < 900:
-                    case = 0
+                #~ right.Stop()
+                #~ left.Drive(245, 1)
+                #~ x = read()
+                #~ dist2 = distance_slice(x, slice_angle, slice_width)
 #############################################################################################################
+                    #~ print('turning towards center')
+                    #~ end = time.time()
+
+                #~ end = time.time()
 
 
         #case 2
@@ -272,8 +281,8 @@ try:
             
             x = read()
             
-            c_angle1 = 23
-            c_angle2 = 13
+            c_angle1 = 28
+            c_angle2 = 18
             c_width = 4
             
             c_dist1 = distance_slice(x,c_angle1,c_width)
@@ -307,7 +316,7 @@ try:
 
             right.Drive(245,0)
             left.Drive(245,1)
-            while((np.min(dist1) > 300) and (np.min(dist2) > 300)):
+            while((np.min(dist1) > 250) and (np.min(dist2) > 250)):
 
                 
                 x = read()
@@ -348,8 +357,9 @@ try:
             #~ while x[0,0] > 1700:
                 #~ x = read()
                 
-            
             stop()
+            
+            
             
             
             case = 0
