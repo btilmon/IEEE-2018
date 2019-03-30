@@ -110,22 +110,30 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     rmask1 = cv2.morphologyEx(rmask1, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
     red = cv2.morphologyEx(rmask1, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))
     
-    #range for lower green
+    #green thresholds
     lower_green = np.array([30,65,65])
     upper_green = np.array([80,255,255])
     gmask = cv2.inRange(hsv, lower_green, upper_green)
-    #range for upper green
-    #~ lower_green = np.array([170,120,70])
-    #~ upper_green = np.array([180,255,255])
-    #~ gmask2 = cv2.inRange(hsv, lower_green, upper_green)    
-    
-    #~ gmask1 = gmask1 + gmask2
     gmask = cv2.morphologyEx(gmask, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
     green = cv2.morphologyEx(gmask, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))    
     
+    #yellow thresholds
+    lower_yellow = np.array([20,100,100])
+    upper_yellow = np.array([30,255,255])
+    ymask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    ymask = cv2.morphologyEx(ymask, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
+    yellow = cv2.morphologyEx(ymask, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))    
     
+    #blue thresholds
+    lower_blue = np.array([100,150,0])
+    upper_blue = np.array([140,255,255])
+    bmask = cv2.inRange(hsv, lower_blue, upper_blue)
+    bmask = cv2.morphologyEx(bmask, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
+    blue = cv2.morphologyEx(bmask, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))    
+        
+        
     
-    mask = green + red
+    mask = green + red + yellow + blue
     final = cv2.bitwise_and(image, image, mask = mask)
     
 
