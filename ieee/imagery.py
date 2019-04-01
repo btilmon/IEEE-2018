@@ -58,7 +58,7 @@ def segmentedImage(image):
 # initialize the camera and grab a reference to the raw camera capture
 camera = PiCamera()
 camera.resolution = (640, 480)
-camera.framerate = 15
+camera.framerate = 10
 rawCapture = PiRGBArray(camera, size=(640, 480))
 
 # allow the camera to warmup
@@ -72,7 +72,7 @@ while cap.isOpened():
    
     for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
         image2 = frame.array
-        rawCapture.truncate(0)
+
         break
         
     objects = segmentedImage(image1)
@@ -83,8 +83,7 @@ while cap.isOpened():
     cv2.imshow('frame',horizontal)
     #~ cv2.imshow('frame',tape)    
     
-    #~ rawCapture.truncate(0)
-    #~ cap.release()
+    rawCapture.truncate(0)
     
     # if the `q` key was pressed, break from the loop
     key = cv2.waitKey(1) & 0xFF
