@@ -9,8 +9,10 @@ import cv2
 import numpy as np
 import camera_object
 from camera_object import objectImage
-from sklearn.cluster import KMeans
-from PIL import Image
+import camera_tape
+from camera_tape import tapeImage
+import os
+import sys
 
 def segmentedImage(image):
 	
@@ -60,50 +62,96 @@ def segmentedImage(image):
 	final = cv2.bitwise_and(image, image, mask = mask)
 	return final
 
+def color():
+	arr1 = np.zeros((4,))
+	arr2 = np.zeros((4,))
+	i = 0 
+
+	while True:
+		
+		frame = objectImage()
+		segmented = segmentedImage(frame)
+		seg = segmented
+
+		b = segmented[:,:,0]
+		g = segmented[:,:,1]
+		r = segmented[:,:,2]
+		
+		b = b[np.where(b > 120)]
+		g = g[np.where(g > 120)]
+		r = r[np.where(r > 120)]
+		
+		yLower = np.uint8([0,70,100])
+		yUpper = np.uint8([100,255,255])
+		yellow = cv2.inRange(segmented, yLower, yUpper)
+		y = cv2.countNonZero(yellow)
+		
+		#~ print('b', b.size, 'g', g.size, 'r', r.size, 'y', y)
+		cv2.imshow("Frame", seg)	
+		
+		frame = tapeImage()
+		segmented = segmentedImage(frame)
+		seg = segmented
+
+		b1 = segmented[:,:,0]
+		g1 = segmented[:,:,1]
+		r1 = segmented[:,:,2]
+		
+		b1 = b1[np.where(b1 > 120)]
+		g1 = g1[np.where(g1 > 120)]
+		r1 = r1[np.where(r1 > 120)]
+		
+		yLower = np.uint8([0,70,100])
+		yUpper = np.uint8([100,255,255])
+		yellow = cv2.inRange(segmented, yLower, yUpper)
+		y1 = cv2.countNonZero(yellow)
+		
+		#~ print('b', b1.size, 'g', g1.size, 'r', r1.size, 'y', y1)
+		
+		k = cv2.waitKey(5) & 0xFF
+		if k == 27:
+			break
+
+		cv2.imshow("2", seg)
+		
+		arr1 = arr1 + np.array([r.size, g.size, b.size, y])
+		arr2 = arr2 + np.array([r1.size, g1.size, b1.size, y1])
+		
+
+		
+		if i > 8:
+			max1 = np.argmax(arr1)
+			max2 = np.argmax(arr2)
+			
+			maxarr = np.array([max1, max2])
+			
+			while maxarr.size == 0:
+				max1 = np.argmax(arr1)
+				max2 = np.argmax(arr2)
+				maxarr = np.array([max1, max2])
+				
+			np.savetxt('file.out', maxarr, delimiter = ',')
+			#~ return maxarr
+			
+			#~ sys.getsizeof(maxarr)
+			
+			#~ os.write(maxarr)
+			#~ os.write(pipe, maxarr)
+			
+			
+			#~ return max1, max2
+			
+			#~ if (max1 == max2 and all(arr1 > 5)):
+				#~ print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+				#~ go to corner
+			i = 0
+
+			arr1 = np.zeros((4,))
+			arr2 = np.zeros((4,))
+			print('reset')
+		
+		i = i + 1
 
 while True:
-	frame = objectImage()
-	segmented = segmentedImage(frame)
-	seg = segmented
-
-	b = segmented[:,:,0]
-	g = segmented[:,:,1]
-	r = segmented[:,:,2]
-	
-	b = b[np.where(b > 120)]
-	g = g[np.where(g > 120)]
-	r = r[np.where(r > 120)]
-	
-	yLower = np.uint8([0,70,100])
-	yUpper = np.uint8([100,255,255])
-	yellow = cv2.inRange(segmented, yLower, yUpper)
-	y = cv2.countNonZero(yellow)
-	
-	print('b', b.size, 'g', g.size, 'r', r.size, 'y', y)
-	
-	k = cv2.waitKey(5) & 0xFF
-	if k == 27:
-		break
-
-	cv2.imshow("Frame", seg)
-	key = cv2.waitKey(1) & 0xFF
-
-	#~ # if the `q` key was pressed, break from the loop
-	if key == ord("q"):
-		break
-#~ while True:
-	
-
-	#~ segmented = segmentedImage(frame)
-
-	#~ img = cv2.cvtColor(segmented, cv2.COLOR_HSV2BGR)
-
-	#~ img = img.reshape((img.shape[0] * img.shape[1],3))
-
-	#~ clt = KMeans(n_clusters=4) #cluster number
-	#~ clt.fit(img)        
-
-	#~ hist = find_histogram(clt)
-	#~ print(hist)
-
+	color()
 

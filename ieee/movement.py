@@ -11,6 +11,19 @@ import math
 from time import sleep
 import threading
 from LidarPrint import *
+import socket
+#~ import cv_pipeline
+import os
+import subprocess
+from subprocess import Popen, PIPE
+#~ from optparse import OptionParser
+import shlex
+import ctypes
+
+
+#~ python_bin = "/home/pi/.virtualenvs/opencv4/bin/python3.5"
+#~ script_file = "/home/pi/IEEE-2018/ieee/cv_pipeline.py"
+
 
 #############Motion#######################
 #Motor A
@@ -53,6 +66,8 @@ lidar = Lidar(ser_lidar)
 
 '''sensors = ser_color.readline().rstrip()'''
 '''data = sensors.split('^')'''
+
+pipe_in, pipe_out = os.pipe()
 
 ###############################
 
@@ -114,7 +129,15 @@ def leftZP():
     right.Drive(150,1)
     left.Drive(150,1)    
     
+def colorFile():
     
+    color = np.loadtxt('file.out')
+    
+    while os.stat('file.out').st_size == 0:
+        color = np.loadtxt('file.out')  
+              
+    return color
+
 '''
 cases:
     case 0 = move out of corner and position orthogonally to center
@@ -127,8 +150,19 @@ try:
     
     case = 0
     while True:
-    ##    case = color(data)
-        
+        #~ while True:
+            #~ urmom = np.loadtxt('file.out')
+            #~ print(urmom)
+        #~ command_template = '/bin/bash -c "source {}/{}/bin/activate && python3.5 -"'
+        #~ command = shlex.split(command_template.format(os.environ['WORKON_HOME'], 'opencv4'))
+        #~ print(command)
+        #~ process = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=False)
+        #~ print((ctypes.c_char).from_address(process))
+        #~ print(process.communicate()[0])
+       
+        #~ cv_pipeline.color(pipe_out)
+        #~ val = os.read(pipe_in, 56)
+        #~ print(val)
         
         #case 0
         if case == 0:
@@ -187,55 +221,20 @@ try:
         if case == 1:
             print('case = ', case)
             
-            #~ if quadrant%4 == 0:
-                #~ case = 2
-            
-            #~ angle0 = 355
-            #~ spread = 4
-            
-            #~ angle90 = 90
-            #~ spread = 5
-            
-            #~ x = read()
-            #~ dist0 = distance_slice(x, angle0, spread)
-            #~ dist90 = distance_slice(x, angle90, spread)
-            
-            #~ straight()
-            
-            #~ while np.min(dist0) > 900:
-                #~ x = read()
-                #~ dist0 = distance_slice(x, angle0, spread)
-                
-            #~ leftZP()
-            
-            #~ while np.min(dist0) < 1500:
-                #~ x = read()
-                #~ dist0 = distance_slice(x, angle0, spread)                  
-            
-            #~ quadrant = quadrant + 1
-            
-            
-                
             
 #######################################################################################################
 ########      THIS CODE WORKED DECENTLY WELL ###########################
             #~ start = time.time()
             #~ end = time.time()
             
-            x = read()
-            slice_angle = 180
-            slice_width = 20
-            dist = distance_slice(x, slice_angle, slice_width)
+            #~ x = read()
+            #~ slice_angle = 180
+            #~ slice_width = 20
+            #~ dist = distance_slice(x, slice_angle, slice_width)
             
-            print('quadrant is',quadrant)
-
-            if (x[0,0] > 1000 and x[0,0] < 1200): 
-                print('congrats, it works! 0 degree=',x[0,0])
-                quadrant = quadrant + 1
-                
-                if quadrant%2 == 0:
-                    case = 2
-            
+            color = colorFile()
+            if color[0] == color[1]:
+                case = 2
 
             
             slice_width = 3
@@ -247,22 +246,28 @@ try:
             dist2 = distance_slice(x, slice_angle, slice_width)
             
             #begin orbiting
-            while np.min(dist2) < 1000: #900 worked well
+            while np.min(dist2) < 1000 and (color[0] != color[1]): #900 worked well
                                     
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
-
-    
-            while np.min(dist2) > 1000: #900 worked well
+                color = colorFile()
+                if color[0] == color[1]:
+                    case = 2
+            
+            
+            while np.min(dist2) > 1000 and (color[0] != color[1]): #900 worked well
                                     
                 right.Stop()
                 left.Drive(245, 1)
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
-                if x[0,0] < 900:
-                    case = 0
+                color = colorFile()
+                if color[0] == color[1]:
+                    case = 2
+                #~ if x[0,0] < 900:
+                    #~ case = 0
 #############################################################################################################
 
 

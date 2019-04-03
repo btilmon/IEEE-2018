@@ -7,11 +7,11 @@ import imutils
 import time
 import cv2
 import numpy as np
-from sklearn.cluster import KMeans
+
  
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--picamera", type=int, default=1,
+ap.add_argument("-p", "--picamera", type=int, default=-1,
 	help="whether or not the Raspberry Pi camera should be used")
 args = vars(ap.parse_args())
  
@@ -24,7 +24,7 @@ time.sleep(2.0)
 
 #~ def objectColor():
 # loop over the frames from the video stream
-def objectImage():
+def tapeImage():
     
     while True:
         # grab the frame from the threaded video stream and resize it
