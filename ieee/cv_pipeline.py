@@ -70,7 +70,8 @@ def segmentedImage(image):
 def color():
 	arr1 = np.zeros((4,))
 	arr2 = np.zeros((4,))
-	i = 0 
+	arr3 = 0
+	i = 0
 
 	while True:
 		
@@ -86,10 +87,18 @@ def color():
 		g = g[np.where(g > 120)]
 		r = r[np.where(r > 120)]
 		
+		
+		
 		yLower = np.uint8([0,70,100])
 		yUpper = np.uint8([100,255,255])
 		yellow = cv2.inRange(segmented, yLower, yUpper)
 		y = cv2.countNonZero(yellow)
+		
+		blackLower = np.uint8([0,0,0])
+		blackUpper = np.uint8([0,0,0])
+		black = cv2.inRange(segmented, blackLower, blackUpper)
+		black = cv2.countNonZero(black)
+		
 		
 		#~ print('b', b.size, 'g', g.size, 'r', r.size, 'y', y)
 		cv2.imshow("Frame", seg)	
@@ -119,52 +128,26 @@ def color():
 
 		cv2.imshow("2", seg)
 		
-		arr1 = arr1 + np.array([r.size, g.size, b.size, y])
-		arr2 = arr2 + np.array([r1.size, g1.size, b1.size, y1])
-		
 
-		
-		if i > 8:
-			max1 = np.argmax(arr1)
-			max2 = np.argmax(arr2)
+		arr1 = np.array([r.size, g.size, b.size, y])
+		arr2 = np.array([r1.size, g1.size, b1.size, y1])
 
-			final = str(max1) + "," + str(max2)			
-			maxarr = np.array([max1, max2])
-			
-			while maxarr.size == 0:
-				max1 = np.argmax(arr1)
-				max2 = np.argmax(arr2)
-				
-				final = str(max1) + "," + str(max2)
-				#~ maxarr = np.array([max1,max2])
-				#~ final = nmaxarr.tostring()
-			print(final)
-				
-			ser.write(final.encode())
-			#~ time.sleep(1)
-			print("writing")
-			
-			#~ np.savetxt('file.out', maxarr, delimiter = ',')
-			#~ return maxarr
-			
-			#~ sys.getsizeof(maxarr)
-			
-			#~ os.write(maxarr)
-			#~ os.write(pipe, maxarr)
-			
-			
-			#~ return max1, max2
-			
-			#~ if (max1 == max2 and all(arr1 > 5)):
-				#~ print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-				#~ go to corner
-			i = 0
-
-			arr1 = np.zeros((4,))
-			arr2 = np.zeros((4,))
-			print('reset')
+		max1 = np.argmax(arr1)
+		max2 = np.argmax(arr2)
 		
-		i = i + 1
+		#~ print(len(segmented) * len(segmented[0]), black)
+		#~ print(np.average(b),np.average(g),np.average(r))
+		if black > (.57 * len(segmented) * len(segmented[0])):
+			max1 = 4
+			
+		final = str(max1) + "," + str(max2)			
+		maxarr = np.array([max1, max2])			
+			
+		print(final)
+			
+		ser.write(final.encode())
+		time.sleep(1)
+		print("writing")
 
 while True:
 
