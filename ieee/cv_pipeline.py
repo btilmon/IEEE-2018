@@ -11,9 +11,14 @@ import camera_object
 from camera_object import objectImage
 import camera_tape
 from camera_tape import tapeImage
-import os
-import sys
+import serial 
+from serial import Serial
+from time import sleep
 
+ser = serial.Serial("/dev/serial0", baudrate = 115200, timeout=None)
+
+
+	
 def segmentedImage(image):
 	
 	'''
@@ -122,15 +127,24 @@ def color():
 		if i > 8:
 			max1 = np.argmax(arr1)
 			max2 = np.argmax(arr2)
-			
+
+			final = str(max1) + "," + str(max2)			
 			maxarr = np.array([max1, max2])
 			
 			while maxarr.size == 0:
 				max1 = np.argmax(arr1)
 				max2 = np.argmax(arr2)
-				maxarr = np.array([max1, max2])
 				
-			np.savetxt('file.out', maxarr, delimiter = ',')
+				final = str(max1) + "," + str(max2)
+				#~ maxarr = np.array([max1,max2])
+				#~ final = nmaxarr.tostring()
+			print(final)
+				
+			ser.write(final.encode())
+			#~ time.sleep(1)
+			print("writing")
+			
+			#~ np.savetxt('file.out', maxarr, delimiter = ',')
 			#~ return maxarr
 			
 			#~ sys.getsizeof(maxarr)
@@ -153,5 +167,6 @@ def color():
 		i = i + 1
 
 while True:
+
 	color()
 
