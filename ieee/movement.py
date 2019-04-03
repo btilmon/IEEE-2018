@@ -21,8 +21,9 @@ import shlex
 import ctypes
 
 
-#~ python_bin = "/home/pi/.virtualenvs/opencv4/bin/python3.5"
-#~ script_file = "/home/pi/IEEE-2018/ieee/cv_pipeline.py"
+ser_color = serial.Serial("/dev/serial0",115200)
+
+
 
 
 #############Motion#######################
@@ -57,8 +58,7 @@ quadrant = 1
 
 port = "/dev/ttyUSB0"
 ser_lidar = serial.Serial(port, 115200, timeout = 5)
-'''ser_color = serial.Serial("/dev/ttyACM0",9600)'''
-#### Arduino ports #####
+
 
 ser_lidar.setDTR(False)
 print (ser_lidar.name)
@@ -114,30 +114,45 @@ def read():
 
 
 def straight():
-    right.Drive(245,0)
-    left.Drive(245,1)
+    right.Drive(170,0)
+    left.Drive(170,1)
 
 def reverse():
-    right.Drive(245,1)
-    left.Drive(245,0)    
+    right.Drive(170,1)
+    left.Drive(170,0)    
     
 def rightZP():
-    right.Drive(150,0)
-    left.Drive(150,0)
+    right.Drive(170,0)
+    left.Drive(170,0)
     
 def leftZP():
-    right.Drive(150,1)
-    left.Drive(150,1)    
+    right.Drive(170,1)
+    left.Drive(170,1)    
     
-def colorFile():
+#~ def colorFile():
     
-    color = np.loadtxt('file.out')
+    #~ color = np.loadtxt('file.out')
     
-    while os.stat('file.out').st_size == 0:
-        color = np.loadtxt('file.out')  
+    #~ while os.stat('file.out').st_size == 0:
+        #~ color = np.loadtxt('file.out')  
               
-    return color
+    #~ return color
 
+def color():
+    msg = ser_color.read(3)
+    #~ time.sleep()
+    front = int(msg[0])
+    back = int(msg[2])
+    
+    final = np.array([front, back])
+    return final
+
+def colorCorner(colorData):
+    if colorData[0] == colorData[1]:
+        return 1
+    else:
+        return 0
+    
 '''
 cases:
     case 0 = move out of corner and position orthogonally to center
@@ -232,9 +247,9 @@ try:
             #~ slice_width = 20
             #~ dist = distance_slice(x, slice_angle, slice_width)
             
-            color = colorFile()
-            if color[0] == color[1]:
-                case = 2
+            #~ color = colorFile()
+            #~ if color[0] == color[1]:
+                #~ case = 2
 
             
             slice_width = 3
@@ -245,27 +260,39 @@ try:
             x = read()
             dist2 = distance_slice(x, slice_angle, slice_width)
             
-            #begin orbiting
-            while np.min(dist2) < 1000 and (color[0] != color[1]): #900 worked well
-                                    
-                x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
+            col = color()
+            req = colorCorner(col)
+            if req == 1:
+                case = 2
+        
+            
+            #~ #begin orbiting
+            #~ while np.min(dist2) < 1000:## and (color[0] != color[1]): #900 worked well
                 
-                color = colorFile()
-                if color[0] == color[1]:
-                    case = 2
+                
+                #~ x = read()
+                #~ dist2 = distance_slice(x, slice_angle, slice_width)
+                #~ col = color()
+                #~ req = colorCorner(col)
+                #~ if req == 1:
+                    #~ case = 2
+
             
             
-            while np.min(dist2) > 1000 and (color[0] != color[1]): #900 worked well
+            #~ while np.min(dist2) > 1000:## and (color[0] != color[1]): #900 worked well
                                     
-                right.Stop()
-                left.Drive(245, 1)
-                x = read()
-                dist2 = distance_slice(x, slice_angle, slice_width)
+                #~ right.Stop()
+                #~ left.Drive(170, 1)
+                #~ x = read()
+                #~ dist2 = distance_slice(x, slice_angle, slice_width)
                 
-                color = colorFile()
-                if color[0] == color[1]:
-                    case = 2
+                #~ col = color()
+                #~ req = colorCorner(col)
+                #~ if req == 1:
+                    #~ case = 2
+                #~ color = colorFile()
+                #~ if color[0] == color[1]:
+                    #~ case = 2
                 #~ if x[0,0] < 900:
                     #~ case = 0
 #############################################################################################################
@@ -285,16 +312,20 @@ try:
             #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
             c_dist2 = distance_slice(x,c_angle2, c_width)
             
-            right.Drive(150,0)
-            left.Drive(150,0)
+            right.Drive(170,0)
+            left.Drive(170,0)
+            
+            
             
             #detect corner
             while any(c_dist2 > c_dist1) == True:
+                print('detecting corner')
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1,c_width)
                 c_dist2 = distance_slice(x,c_angle2, c_width)
                 
             while any(c_dist2 < c_dist1) == True:
+                print('detecting corner')
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1, c_width)
                 c_dist2 = distance_slice(x, c_angle2, c_width)
@@ -310,11 +341,11 @@ try:
             dist1 = distance_slice(x, angle1, width1)
             dist2 = distance_slice(x, angle2, width1) 
 
-            right.Drive(245,0)
-            left.Drive(245,1)
+            right.Drive(170,0)
+            left.Drive(170,1)
             while((np.min(dist1) > 300) and (np.min(dist2) > 300)):
 
-                
+                print('moving towards corner')
                 x = read()
                 dist1 = distance_slice(x, angle1, width1)
                 dist2 = distance_slice(x, angle2, width1) 
@@ -334,7 +365,7 @@ try:
             #reverse out of corner
             while x[0,0] < 500 or x[0,0] == 3000 :
                 x = read()
-
+                print('reversing out of corner')
         
             x = read()
             angle0 = 30
@@ -344,6 +375,7 @@ try:
             leftZP()
             
             while np.min(dist) < 900:
+                print('returning to orbit')
                 x = read()
                 dist = distance_slice(x, angle, width)        
             
