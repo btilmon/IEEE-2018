@@ -7,6 +7,7 @@ import imutils
 import time
 import cv2
 import numpy as np
+from time import sleep
 
  
 # construct the argument parse and parse the arguments
@@ -30,9 +31,16 @@ def tapeImage():
         # grab the frame from the threaded video stream and resize it
         # to have a maximum width of 400 pixels
         frame = vs.read()
-        frame = imutils.resize(frame, width=400)
-        #~ print(frame)
-        #~ # show the frame
+        frame = frame[200:,150:250,:] #width x height since camera inverted
+        #~ frame = imutils.resize(frame, width=400)
+
+
+        #~ cv2.imshow("2", frame)
+        #~ k = cv2.waitKey(5) & 0xFF
+        #~ if k == 27:
+            #~ break
+            
+        #~ sleep(5)
 
         return frame
 
@@ -40,4 +48,4 @@ def tapeImage():
     vs.stop()
 
 #~ while True:
-    #~ objectImage()
+    #~ tapeImage()
