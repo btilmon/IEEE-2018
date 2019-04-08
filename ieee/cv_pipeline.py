@@ -49,7 +49,7 @@ def segmentedImage(image):
 	#~ green = cv2.morphologyEx(gmask, cv2.MORPH_DILATE, np.ones((3,3),np.uint8))    
 	
 	#yellow thresholds
-	lower_yellow = np.array([20,100,100])
+	lower_yellow = np.array([20,20,20])
 	upper_yellow = np.array([30,255,255])
 	yellow = cv2.inRange(hsv, lower_yellow, upper_yellow)
 	#~ ymask = cv2.morphologyEx(ymask, cv2.MORPH_OPEN, np.ones((3,3),np.uint8))
@@ -85,7 +85,7 @@ def color():
 		
 		b = b[np.where(b > 120)]
 		g = g[np.where(g > 120)]
-		r = r[np.where(r > 120)]
+		r = r[np.where(r > 140)]
 		
 		
 		
@@ -135,9 +135,9 @@ def color():
 		max1 = np.argmax(arr1)
 		max2 = np.argmax(arr2)
 		
-		#~ print(len(segmented) * len(segmented[0]), black)
+		print(len(segmented) * len(segmented[0]), black)
 		#~ print(np.average(b),np.average(g),np.average(r))
-		if black > (.57 * len(segmented) * len(segmented[0])):
+		if black > (.22 * len(segmented) * len(segmented[0])):
 			max1 = 4
 			
 		final = str(max1) + "," + str(max2)			
