@@ -145,9 +145,9 @@ def color():
     msg = ser_color.read(3)
     #~ time.sleep()
     front = int(msg[0])
-    back = int(msg[2])
+    side = int(msg[2])
     
-    final = np.array([front, back])
+    final = np.array([front, side])
     return final
 
 def colorCorner(colorData):
@@ -170,12 +170,14 @@ cases:
 '''
 
 try:
-    
+    start = time.time()
+    end = 0
+
     case = 0
     while True:
-        
+        end = time.time()
         if case == 0:
-            #~ print('case = ', case)
+            print('case = ', case)
 
             x = read()
             
@@ -205,6 +207,9 @@ try:
             while(np.min(dist) > 800):
                 x = read()
                 dist = distance_slice(x, angle, 5)
+                
+            col = color()
+            start_col = col[1]
 
             case = 1
 ############################################################
@@ -213,14 +218,13 @@ try:
         if case == 1:
             #~ print('case = ', case)
             
-            slice_width = 10
+            slice_width = 15
             slice_angle = 290
             
 
 
             x = read()
             dist2 = distance_slice(x, slice_angle, slice_width)
-            dist3 = distance_slice(x, 90,5)
             
             
             col = color()
@@ -229,12 +233,12 @@ try:
                 case = 2
         
             #~ #begin orbiting
+            print('begin orbit')
             while np.min(dist2) < 900:## and (color[0] != color[1]): #900 worked well
                 
                 straight()
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
-                dist3 = distance_slice(x, 90,5)
                 
                 #~ if any(dist3) < 840:
                     #~ print('crossed tape')
@@ -255,8 +259,8 @@ try:
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
-                if x[0,0] < 900:
-                    case = 'turnCorrect'
+                #~ if x[0,0] < 900:
+                    #~ case = 'turnCorrect'
 
             col = color()
             req = colorCorner(col)
@@ -265,6 +269,7 @@ try:
             
         if case == 'turnCorrect':
 
+            print('TurnCorrect')
             x = read()
             angle = 295
             dist = distance_slice(x, angle, 5)
@@ -286,11 +291,11 @@ try:
 
         #case 2
         if case == 2:
-            #~ print('case = ', case)
+            print('case = ', case)
             
             x = read()
             
-            c_angle1 = 24
+            c_angle1 = 14
             c_angle2 = 14
             c_width = 4
             
@@ -307,12 +312,14 @@ try:
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1,c_width)
                 c_dist2 = distance_slice(x,c_angle2, c_width)
+                print('detect corner 1')
                 
             while any(c_dist2 < c_dist1) == True:
                 #~ print('detecting corner')
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1, c_width)
                 c_dist2 = distance_slice(x, c_angle2, c_width)
+                print('detect corner 1')
                 
             #move towards corner
             x = read()
@@ -323,7 +330,7 @@ try:
             
             dist1 = distance_slice(x, angle1, width1)
             dist2 = distance_slice(x, angle2, width1) 
-            dist = np.concatenate(dist1,dist2)
+            dist = np.concatenate([dist1,dist2])
             print('dist is',dist)
 
             straight()
@@ -335,7 +342,7 @@ try:
                 x = read()
                 dist1 = distance_slice(x, angle1, width1)
                 dist2 = distance_slice(x, angle2, width1) 
-                dist = np.concatenate(dist1,dist2)
+                dist = np.concatenate([dist1,dist2])
                 
             reverse()
             
@@ -375,6 +382,8 @@ try:
             print('left corner',i,'times')
             i = i + 1
             case = 1
+            
+    
             
 except KeyboardInterrupt:
     print("Exiting")
