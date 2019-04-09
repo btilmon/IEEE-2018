@@ -270,7 +270,7 @@ try:
                     right.Drive(190, 0)
                     left.Drive(180, 1)
                     x = read()
-                    left_dist = distance_slice(x, 270, 90)
+                    left_dist = distance_slice(x, 270, 89)
                     right_dist = distance_slice(x, 90, 50) 
                     
                 while np.min(right_dist) < right_thres[orbit_group]:
