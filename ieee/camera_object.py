@@ -31,7 +31,7 @@ def objectImage():
         # grab the frame from the threaded video stream and resize it
         # to have a maximum width of 400 pixels
         frame = vs.read()
-        frame = frame[140:200,10:350,:] #width x height since camera inverted
+        frame = frame[140:180,10:350,:] #width x height since camera inverted
         #~ frame = imutils.resize(frame, width=400)
 
 
