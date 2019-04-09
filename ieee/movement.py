@@ -172,7 +172,7 @@ cases:
 try:
     start = time.time()
     end = 0
-
+    orbit_group = 0
     case = 0
     while True:
         end = time.time()
@@ -188,7 +188,7 @@ try:
             
             straight()
             
-            while np.min(dist) < 800:  
+            while np.min(dist) < 1100:  
                 x = read()
                 dist = distance_slice(x, angle, width)
 
@@ -197,8 +197,8 @@ try:
             rightZP()
 
             x = read()
-            angle = 295
-            dist = distance_slice(x, angle, 5)
+            angle = 278
+            dist = distance_slice(x, angle, 15)
             
             while(np.min(dist) < 800):
                 x = read()
@@ -208,37 +208,77 @@ try:
                 x = read()
                 dist = distance_slice(x, angle, 5)
                 
-            col = color()
-            start_col = col[1]
+            #~ col = color()
+            #~ start_col = col[1]
 
             case = 1
 ############################################################
 
         #case 1
         if case == 1:
-            #~ print('case = ', case)
+            print('case = ', case)
             
             slice_width = 15
-            slice_angle = 290
+            slice_angle = 300
             
 
 
             x = read()
             dist2 = distance_slice(x, slice_angle, slice_width)
             
+            left_thres = np.array([160, 400, 500])
+            right_thres = np.array([850, 500, 600])
             
-            col = color()
-            req = colorCorner(col)
-            if req == 1:
-                case = 2
+            left_dist = distance_slice(x, 270, 15)
+            right_dist = distance_slice(x, 90, 15)
+            
+            #~ right.Drive(150, 0)
+            #~ left.Drive(200, 1)
+            
+            #~ while np.min(left_dist) < left_thres[orbit_group]:
+                #~ right.Drive(200, 0)
+                #~ left.Drive(150, 1)
+                #~ x = read()
+                #~ left_dist = distance_slice(x, 290, 15)
+                #~ right_dist = distance_slice(x, 90, 15)    
+                
+            #~ while np.min(right_dist) < right_thres[orbit_group]:
+                #~ right.Drive(150, 0)
+                #~ left.Drive(200, 1)
+                #~ x = read()
+                #~ left_dist = distance_slice(x, 290, 15)
+                #~ right_dist = distance_slice(x, 90, 15)          
+                
+                
+            
+            #~ col = color()
+            #~ req = colorCorner(col)
+            #~ if req == 1:
+                #~ case = 2
         
             #~ #begin orbiting
-            print('begin orbit')
+            #~ print('begin orbit')
             while np.min(dist2) < 900:## and (color[0] != color[1]): #900 worked well
                 
-                straight()
+                #~ straight()
+                right.Drive(230,0)
+                left.Drive(200,1)
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
+                
+                while np.min(left_dist) < left_thres[orbit_group]: 
+                    right.Drive(190, 0)
+                    left.Drive(180, 1)
+                    x = read()
+                    left_dist = distance_slice(x, 270, 90)
+                    right_dist = distance_slice(x, 90, 50) 
+                    
+                while np.min(right_dist) < right_thres[orbit_group]:
+                    right.Drive(160, 0)
+                    left.Drive(245, 1)
+                    x = read()
+                    left_dist = distance_slice(x, 270, 90)
+                    right_dist = distance_slice(x, 90, 50)                      
                 
                 #~ if any(dist3) < 840:
                     #~ print('crossed tape')
@@ -247,10 +287,10 @@ try:
                     #~ if req == 1:
                         #~ case = 2
 
-            col = color()
-            req = colorCorner(col)
-            if req == 1:
-                case = 2
+            #~ col = color()
+            #~ req = colorCorner(col)
+            #~ if req == 1:
+                #~ case = 2
             
             while np.min(dist2) > 900:## and (color[0] != color[1]): #900 worked well
                                     
@@ -259,13 +299,27 @@ try:
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 
+                #~ while np.min(left_dist) < left_thres[orbit_group]: 
+                    #~ right.Drive(190, 0)
+                    #~ left.Drive(140, 1)
+                    #~ x = read()
+                    #~ left_dist = distance_slice(x, 290, 15)
+                    #~ right_dist = distance_slice(x, 90, 15) 
+                    
+                #~ while np.min(right_dist) < right_thres[orbit_group]:
+                    #~ right.Drive(170, 0)
+                    #~ left.Drive(235, 1)
+                    #~ x = read()
+                    #~ left_dist = distance_slice(x, 290, 15)
+                    #~ right_dist = distance_slice(x, 90, 15)                    
+                
                 #~ if x[0,0] < 900:
                     #~ case = 'turnCorrect'
 
-            col = color()
-            req = colorCorner(col)
-            if req == 1:
-                case = 2
+            #~ col = color()
+            #~ req = colorCorner(col)
+            #~ if req == 1:
+                #~ case = 2
             
         if case == 'turnCorrect':
 
