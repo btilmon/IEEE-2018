@@ -117,8 +117,8 @@ def read():
 
 
 def straight():
-    right.Drive(210,0)
-    left.Drive(211,1)
+    right.Drive(220,0)
+    left.Drive(221,1)
 
 def reverse():
     right.Drive(230,1)
@@ -173,7 +173,8 @@ def dangerZone(case):
         return case
 
 
-
+#~ while True:
+    #~ print(color())
 
     
 '''
@@ -289,9 +290,9 @@ try:
                 #~ if req == 1:
                     #~ case = 2
             #~ else:        
-            req = colorCorner(color())
-            if req == 1:
-                case = 2
+            #~ req = colorCorner(color())
+            #~ if req == 1:
+                #~ case = 2
         
             #~ #begin orbiting
             #~ print('begin orbit')
@@ -303,14 +304,14 @@ try:
                 x = read()
                 dist2 = distance_slice(x, slice_angle, slice_width)
                 #~ case = dangerZone(case)
-                                #~ if (end - start) > orbitTime:
+                #~ if (end - start) > orbitTime:
                     #~ req = colorCorner(color())
                     #~ if req == 1:
                         #~ case = 2
                 #~ else:        
-                req = colorCorner(color())
-                if req == 1:
-                    case = 2     
+                    #~ req = colorCorner(color())
+                    #~ if req == 1:
+                        #~ case = 2     
                     
                 while np.min(left_dist) < left_thres[orbit_group] and np.min(right_dist) > right_thres[orbit_group]: 
                     right.Drive(190, 0)
@@ -320,7 +321,16 @@ try:
                     right_dist = distance_slice(x, right_angle, 40)
                     #~ case = dangerZone(case) 
                     
-             
+                if (end - start) > orbitTime:
+                    req = colorCorner(color())
+                    if req == 1:
+                        case = 2
+                else:        
+                    req = colorCorner(color())
+                    if req == 1:
+                        case = 2   
+                    else:
+                        break
                     
                 while np.min(right_dist) < right_thres[orbit_group] and np.min(left_dist) > left_thres[orbit_group]:
                     right.Drive(160, 0)
@@ -328,6 +338,8 @@ try:
                     x = read()
                     left_dist = distance_slice(x, left_angle, 359 - left_angle)
                     right_dist = distance_slice(x, right_angle, 40)  
+                    
+
                     #~ case = dangerZone(case)  
                     
                 #~ if (end - start) > orbitTime:
@@ -335,9 +347,11 @@ try:
                     #~ if req == 1:
                         #~ case = 2
                 #~ else:        
-                #~ req = colorCorner(color())
-                #~ if req == 1:
-                    #~ case = 2                 
+                    #~ req = colorCorner(color())
+                    #~ if req == 1:
+                        #~ case = 2   
+                    #~ else:
+                        #~ break
 
 
             #~ if (end - start) > orbitTime:
