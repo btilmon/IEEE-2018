@@ -83,9 +83,9 @@ def color():
 		g = segmented[:,:,1]
 		r = segmented[:,:,2]
 		
-		b = b[np.where(b > 140)]
-		g = g[np.where(g > 140)]
-		r = r[np.where(r > 140)]
+		b = b[np.where(b > 170)]
+		g = g[np.where(g > 170)]
+		r = r[np.where(r > 170)]
 		
 		
 		
@@ -113,9 +113,9 @@ def color():
 		g1 = segmented[:,:,1]
 		r1 = segmented[:,:,2]
 		
-		b1 = b1[np.where(b1 > 140)]
-		g1 = g1[np.where(g1 > 140)]
-		r1 = r1[np.where(r1 > 140)]
+		b1 = b1[np.where(b1 > 170)]
+		g1 = g1[np.where(g1 > 170)]
+		r1 = r1[np.where(r1 > 170)]
 		
 		yLower = np.uint8([0,100,100])
 		yUpper = np.uint8([100,255,255])
@@ -142,12 +142,12 @@ def color():
 		max1 = np.argmax(arr1)
 		max2 = np.argmax(arr2)
 		
-		thres_black = .5
+		thres_black = .98
 		
 		#~ print(np.average(b1),np.average(g1),np.average(r1))
 		if black > (thres_black * len(segmented) * len(segmented[0])):
 			max2 = 4
-		if black1 > (thres_black * len(segmented) * len(segmented[0])):
+		if black1 > (thres_black * len(seg) * len(seg[0])):
 			max1 = 5			
 		final = str(max1) + "," + str(max2)			
 		maxarr = np.array([max1, max2])			
