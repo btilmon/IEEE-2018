@@ -141,7 +141,7 @@ def leftZP():
               
     #~ return color
 
-def color():
+def colorMethod():
     msg = ser_color.read(3)
     #~ time.sleep()
     front = int(msg[0])
@@ -187,15 +187,14 @@ cases:
 try:
     start = time.time()
     orbitTime = 150
-    #~ ringTime = 25
     end = 0
     orbit_group = 0
     case = 0
+    timer_count = 1
+    time_check_constant = 45
     while True:
         end = time.time()
-        #~ oTime = time.time()
         print(end-start)
-        #~ print(oTime-start)
         if case == 0:
             print('case = ', case)
 
@@ -251,20 +250,16 @@ try:
                 x = read()
                 dist = distance_slice(x, angle, 5)
             
-            #~ col = color()
-            #~ while col[1] == 4:
-                #~ col = color()
-            
             stop()
             sleep(2)
-            col = color()
+            col = colorMethod()
             while col[1] == 4:
-                col = color()
+                col = colorMethod()
             start_col = col[1]
             print('start_col',start_col)
             right.Drive(210,0)
             left.Drive(215,1)
-            sleep(.75)
+
             case = 1
 ############################################################
 
@@ -276,12 +271,12 @@ try:
             slice_width = np.array([15, 20, 20])
             slice_angle = np.array([305, 300, 300])
             
-            lDrive = np.array([215, 200, 190]) 
+            lDrive = np.array([220, 205, 190]) 
 
             dist2 = distance_slice(x, slice_angle[orbit_group], slice_width[orbit_group])
             
-            left_thres = np.array([300, 400, 500])
-            right_thres = np.array([305, 405, 505])
+            left_thres = np.array([300, 355, 425])
+            right_thres = np.array([305, 360, 430])
             
             left_angle = 270
             right_angle = 60            
@@ -290,22 +285,24 @@ try:
             right_dist = distance_slice(x, right_angle, 15)
             
             #~ case = dangerZone(case)
-
                 
             if (end - start) > orbitTime:
-                color = color()
+                color = colorMethod()
                 if color[1] == start_col:
                     case = 2
+                    print('Going to corner - time running out')
             else:        
-                req = colorCorner(color())
+                req = colorCorner(colorMethod())
                 if req == 1:
                     case = 2
+                    print('Going to corner - colors matched')
+            if (end - start)/time_check_constant > timer_count:
+                timer_count = timer_count + 1
+                case = 2
+                print('Going to corner - timer check')
         
             #~ #begin orbiting
-            #~ print('begin orbit')
             while np.min(dist2) < 900:## and (color[0] != color[1]): #900 worked well
-                
-                #~ straight()
                 straight()
                 x = read()
                 dist2 = distance_slice(x, slice_angle[orbit_group], slice_width[orbit_group])
@@ -314,13 +311,19 @@ try:
                 #~ case = dangerZone(case)
                 
                 if (end - start) > orbitTime:
-                    color = color()
+                    color = colorMethod()
                     if color[1] == start_col:
                         case = 2
+                        print('Going to corner - time running out')
                 else:        
-                    req = colorCorner(color())
+                    req = colorCorner(colorMethod())
                     if req == 1:
                         case = 2
+                        print('Going to corner - colors matched')
+                if (end - start)/time_check_constant > timer_count:
+                    timer_count = timer_count + 1
+                    case = 2
+                    print('Going to corner - timer check')
                         
                 while (np.min(left_dist) < left_thres[orbit_group]) and (np.min(left_dist) < right_thres[orbit_group]) and (np.min(dist2) < 900): 
                     x = read()
@@ -336,13 +339,19 @@ try:
                 dist2 = distance_slice(x, slice_angle[orbit_group], slice_width[orbit_group])
                 
                 if (end - start) > orbitTime:
-                    color = color()
+                    color = colorMethod()
                     if color[1] == start_col:
                         case = 2
+                        print('Going to corner - time running out')
                 else:        
-                    req = colorCorner(color())
+                    req = colorCorner(colorMethod())
                     if req == 1:
-                        case = 2  
+                        case = 2
+                        print('Going to corner - colors matched')
+                if (end - start)/time_check_constant > timer_count:
+                    timer_count = timer_count + 1
+                    case = 2
+                    print('Going to corner - timer check')
                     
                 while (np.min(left_dist) > right_thres[orbit_group]) and (np.min(left_dist) > left_thres[orbit_group]) and (np.min(dist2) < 900):
                     x = read()
@@ -350,17 +359,23 @@ try:
                     right_dist = distance_slice(x, right_angle, 40) 
 
                     dist2 = distance_slice(x, slice_angle[orbit_group], slice_width[orbit_group])
-                    right.Drive(150, 0)
+                    right.Drive(165, 0)
                     left.Drive(lDrive[orbit_group], 1)
 
             if (end - start) > orbitTime:
-                color = color()
+                color = colorMethod()
                 if color[1] == start_col:
                     case = 2
+                    print('Going to corner - time running out')
             else:        
-                req = colorCorner(color())
+                req = colorCorner(colorMethod())
                 if req == 1:
                     case = 2
+                    print('Going to corner - colors matched')
+            if (end - start)/time_check_constant > timer_count:
+                timer_count = timer_count + 1
+                case = 2
+                print('Going to corner - timer check')
                     
             x = read()
             dist2 = distance_slice(x, slice_angle[orbit_group], slice_width[orbit_group])
@@ -384,7 +399,6 @@ try:
             c_width = 4
             
             c_dist1 = distance_slice(x,c_angle1,c_width)
-            #~ deriv = np.asarray([dist1[i+1] - dist1[i] for i in range(len(dist1) - 1)])
             c_dist2 = distance_slice(x,c_angle2, c_width)
             
             right.Drive(180,0)
@@ -392,23 +406,16 @@ try:
             
             #detect corner
             while any(c_dist2 > c_dist1) == True:
-                #~ print('detecting corner')
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1,c_width)
                 c_dist2 = distance_slice(x,c_angle2, c_width)
-                #~ print('detect corner 1')
                 
             while any(c_dist2 < c_dist1) == True:
-                #~ print('detecting corner')
                 x = read()
                 c_dist1 = distance_slice(x,c_angle1, c_width)
                 c_dist2 = distance_slice(x, c_angle2, c_width)
-                #~ print('detect corner 1')
                 
             #move towards corner
-
-            
-            #~ while((np.min(dist1) > 300) and (np.min(dist2) > 300)):
             while np.min(dist) > 300:
                 x = read()
                 
@@ -423,7 +430,7 @@ try:
                 diff = x[10,0] - x[(len(x) - 10),0]
                 
                 while  diff < 0 and (np.min(dist) > 300):
-                    print('turning left')
+                    #~ print('turning left')
                     right.Drive(220,0)
                     left.Drive(245,1) 
                     x = read()
@@ -432,7 +439,7 @@ try:
                     diff = x[10,0] - x[(len(x) - 10),0]
                     
                 while  diff > 0 and (np.min(dist) > 300):
-                    print('turning right')
+                    #~ print('turning right')
                     right.Drive(245,0)
                     left.Drive(220,1) 
                     x = read()
@@ -448,7 +455,7 @@ try:
                 case = 3
             else:
                 
-                reverse_dist = np.array([1000, 800, 700])
+                reverse_dist = np.array([1000, 850, 750])
                 
                 #reverse out of corner
                 reverse()
