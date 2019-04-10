@@ -36,10 +36,10 @@ m2in1 = 21
 m2in2 = 20
 m2PWM = 16
 #Lidar
-ldr = 17
+#ldr = 17
 
-ldrM = Motor.Motor(ldr)
-ldrM.Drive(255)
+#ldrM = Motor.Motor(ldr)
+#ldrM.Drive(255)
 
 left = Motor.Motor(m1PWM,m1in1,m1in2)
 right = Motor.Motor(m2PWM,m2in1,m2in2)
@@ -491,7 +491,7 @@ while True:
     if case == 3:
         print('Raise flag')
         stop()
-        ldrM.Stop()
+        
         break
 
             

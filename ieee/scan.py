@@ -1,7 +1,6 @@
 import numpy as np
 import pigpio
 import Lidar_Trial
-import Lidar_Motion
 import Motor
 from time import sleep
 #import matplotlib.pyplot as plt
@@ -10,7 +9,8 @@ falure = 0
 sleep(0)
 lidar = Lidar_Trial.Lidar()
 
-motor = Lidar_Motion.LDRPWM(17)
+motor = Motor.Motor(17)
+motor.Drive(255)
 #~ #Motor A
 #~ m1DIR = 6
 #~ m1PWM = 13
@@ -76,7 +76,7 @@ try:
         print("Failed to initialize")       
 except KeyboardInterrupt:
     print("Exiting")
-    motor.Spin(0)
+    motor.Drive(0)
     #~ right.Drive(0,0)
     #~ left.Drive(0,0)
     #~ left.Stop()
