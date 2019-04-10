@@ -15,7 +15,7 @@ import serial
 from serial import Serial
 from time import sleep
 
-ser = serial.Serial("/dev/serial0", baudrate = 115200, timeout=None)
+ser = serial.Serial("/dev/serial0", baudrate = 115200, timeout=.09)
 
 
 	
@@ -83,13 +83,13 @@ def color():
 		g = segmented[:,:,1]
 		r = segmented[:,:,2]
 		
-		b = b[np.where(b > 120)]
-		g = g[np.where(g > 120)]
+		b = b[np.where(b > 140)]
+		g = g[np.where(g > 140)]
 		r = r[np.where(r > 140)]
 		
 		
 		
-		yLower = np.uint8([0,70,100])
+		yLower = np.uint8([0,100,100])
 		yUpper = np.uint8([100,255,255])
 		yellow = cv2.inRange(segmented, yLower, yUpper)
 		y = cv2.countNonZero(yellow)
@@ -97,11 +97,13 @@ def color():
 		blackLower = np.uint8([0,0,0])
 		blackUpper = np.uint8([0,0,0])
 		black = cv2.inRange(segmented, blackLower, blackUpper)
-		black = cv2.countNonZero(black)
+		black1 = cv2.countNonZero(black)
 		
+		#~ print('black pix',black,'total pix',len(segmented) * len(segmented[0]))		
 		
+	
 		#~ print('b', b.size, 'g', g.size, 'r', r.size, 'y', y)
-		cv2.imshow("Frame", seg)	
+		#~ cv2.imshow("Frame", seg)	
 		
 		frame = tapeImage()
 		segmented = segmentedImage(frame)
@@ -111,22 +113,27 @@ def color():
 		g1 = segmented[:,:,1]
 		r1 = segmented[:,:,2]
 		
-		b1 = b1[np.where(b1 > 120)]
-		g1 = g1[np.where(g1 > 120)]
-		r1 = r1[np.where(r1 > 120)]
+		b1 = b1[np.where(b1 > 140)]
+		g1 = g1[np.where(g1 > 140)]
+		r1 = r1[np.where(r1 > 140)]
 		
-		yLower = np.uint8([0,70,100])
+		yLower = np.uint8([0,100,100])
 		yUpper = np.uint8([100,255,255])
 		yellow = cv2.inRange(segmented, yLower, yUpper)
 		y1 = cv2.countNonZero(yellow)
-		
+
+		blackLower = np.uint8([0,0,0])
+		blackUpper = np.uint8([0,0,0])
+		black = cv2.inRange(segmented, blackLower, blackUpper)
+		black = cv2.countNonZero(black)
+	
 		#~ print('b', b1.size, 'g', g1.size, 'r', r1.size, 'y', y1)
 		
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:
 			break
 
-		cv2.imshow("2", seg)
+		#~ cv2.imshow("2", seg)
 		
 
 		arr1 = np.array([r.size, g.size, b.size, y])
@@ -135,11 +142,13 @@ def color():
 		max1 = np.argmax(arr1)
 		max2 = np.argmax(arr2)
 		
-		print(len(segmented) * len(segmented[0]), black)
-		#~ print(np.average(b),np.average(g),np.average(r))
-		if black > (.22 * len(segmented) * len(segmented[0])):
-			max1 = 4
-			
+		thres_black = .5
+		
+		#~ print(np.average(b1),np.average(g1),np.average(r1))
+		if black > (thres_black * len(segmented) * len(segmented[0])):
+			max2 = 4
+		if black1 > (thres_black * len(segmented) * len(segmented[0])):
+			max1 = 5			
 		final = str(max1) + "," + str(max2)			
 		maxarr = np.array([max1, max2])			
 			
@@ -147,7 +156,7 @@ def color():
 			
 		ser.write(final.encode())
 		time.sleep(1)
-		print("writing")
+		#~ print("writing")
 
 while True:
 
