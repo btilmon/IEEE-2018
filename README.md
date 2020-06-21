@@ -1,5 +1,5 @@
 # 2018-2019 IEEE Robot 
-For the 2019 IEEE SoutheastCon Hardware Competition, the Murray State University IEEE Robotics Team developed an atuonomous robot, this is the repository containing all code for this project.
+For the 2019 IEEE SoutheastCon Hardware Competition, the Murray State University IEEE Robotics Team developed an autonomous robot, this is the repository containing all code for this project.
 
 [Video](https://drive.google.com/file/d/1Nv7W-boNWKA6p69vr6NaCU71pYvb4EZj/view)
 
